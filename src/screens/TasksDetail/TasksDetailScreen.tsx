@@ -67,6 +67,7 @@ const TasksDetailScreen = () => {
       return false;
     } else {
       dispatch(taskSlice.actions.clearTask());
+      dispatch(taskSlice.actions.setForceUpdate(true));
       navigation.goBack();
       return true;
     }

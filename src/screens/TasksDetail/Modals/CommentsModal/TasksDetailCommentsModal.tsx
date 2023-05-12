@@ -121,6 +121,7 @@ const TasksDetailCommentsModal: FC<TasksDetailCommentsModalProps> = ({
                 { height: Math.max(25, inputHeight) },
               ]}
               placeholder="Введите комментарий"
+              placeholderTextColor={COLORS.secondaryText}
               value={text}
               onChangeText={setText}
               multiline={true}

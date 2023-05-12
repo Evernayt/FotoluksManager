@@ -53,6 +53,7 @@ const Search: FC<SearchProps> = ({
         />
         <TextInput
           placeholder="Поиск"
+          placeholderTextColor={COLORS.secondaryText}
           {...props}
           style={[styles.input, inputStyle]}
         />
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     paddingLeft: 40,
     paddingRight: 12,
-    color: COLORS.secondaryText,
+    color: COLORS.primaryText,
   },
   resultContainer: {
     borderWidth: 1,
