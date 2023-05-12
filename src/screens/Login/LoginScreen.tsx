@@ -45,9 +45,10 @@ const LoginScreen = () => {
     getActiveShop().then((shop) => {
       if (shop) {
         dispatch(appSlice.actions.setActiveShop(shop));
-        autoSignIn();
       }
     });
+
+    autoSignIn();
 
     const controller = new AbortController();
     fetchShops(controller.signal);
