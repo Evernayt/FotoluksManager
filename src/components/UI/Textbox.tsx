@@ -6,76 +6,82 @@ import {
   View,
 } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
-import { FC, useEffect, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
 interface TextboxProps extends TextInputProps {
   label: string;
   labelBgColor?: string;
 }
 
-const Textbox: FC<TextboxProps> = ({
-  label,
-  labelBgColor = COLORS.background,
-  ...props
-}) => {
-  const [isFocused, setIsFocused] = useState<boolean>(false);
+const Textbox = forwardRef<TextInput, TextboxProps>(
+  ({ label, labelBgColor = COLORS.background, ...props }, ref) => {
+    const [isFocused, setIsFocused] = useState<boolean>(false);
 
-  const focusValue = useRef(
-    new Animated.Value(props.value === "" ? 0 : 1)
-  ).current;
-  const inputRef = useRef<TextInput>(null);
+    const focusValue = useRef(
+      new Animated.Value(props.value === "" ? 0 : 1)
+    ).current;
+    const inputRef = useRef<TextInput>(null);
 
-  useEffect(() => {
-    Animated.timing(focusValue, {
-      toValue: isFocused || props.value !== "" ? 1 : 0,
-      duration: 200,
-      useNativeDriver: false,
-    }).start();
-  }, [isFocused]);
+    useImperativeHandle(ref, () => inputRef.current as TextInput);
 
-  const focuseHandler = () => {
-    setIsFocused(true);
-  };
+    useEffect(() => {
+      Animated.timing(focusValue, {
+        toValue: isFocused || props.value !== "" ? 1 : 0,
+        duration: 200,
+        useNativeDriver: false,
+      }).start();
+    }, [isFocused]);
 
-  const blurHandler = () => {
-    setIsFocused(false);
-  };
+    const focuseHandler = () => {
+      setIsFocused(true);
+    };
 
-  const labelStyle = {
-    top: focusValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: [13, -8],
-    }),
-    left: focusValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: [8, 16],
-    }),
-    fontSize: focusValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: [16, 14],
-    }),
-    backgroundColor: labelBgColor,
-  };
+    const blurHandler = () => {
+      setIsFocused(false);
+    };
 
-  return (
-    <View style={styles.container}>
-      <Animated.Text
-        style={[styles.label, labelStyle]}
-        onPress={() => inputRef.current?.focus()}
-      >
-        {label}
-      </Animated.Text>
-      <TextInput
-        style={[styles.input, props.style]}
-        {...props}
-        placeholder=""
-        onFocus={focuseHandler}
-        onBlur={blurHandler}
-        ref={inputRef}
-      />
-    </View>
-  );
-};
+    const labelStyle = {
+      top: focusValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [13, -8],
+      }),
+      left: focusValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [8, 16],
+      }),
+      fontSize: focusValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [16, 14],
+      }),
+      backgroundColor: labelBgColor,
+    };
+
+    return (
+      <View style={styles.container}>
+        <Animated.Text
+          style={[styles.label, labelStyle]}
+          onPress={() => inputRef.current?.focus()}
+        >
+          {label}
+        </Animated.Text>
+        <TextInput
+          style={[styles.input, props.style]}
+          {...props}
+          placeholder=""
+          onFocus={focuseHandler}
+          onBlur={blurHandler}
+          ref={inputRef}
+        />
+      </View>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {
