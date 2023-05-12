@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { View, StyleSheet, Image } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { View, StyleSheet, Image, TextInput } from "react-native";
 import { COLORS } from "../../constants/theme";
 import { logo } from "../../constants/images";
 import {
@@ -37,6 +37,8 @@ const LoginScreen = () => {
 
   const shops = useAppSelector((state) => state.app.shops);
   const activeShop = useAppSelector((state) => state.app.activeShop);
+
+  const passwordTextboxRef = useRef<TextInput>(null);
 
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProps>();
@@ -137,12 +139,24 @@ const LoginScreen = () => {
           items={shops}
           onChange={shopChangeHandler}
         />
-        <Textbox label="Логин" value={login} onChangeText={setLogin} />
+        <Textbox
+          label="Логин"
+          autoCapitalize="none"
+          value={login}
+          onChangeText={setLogin}
+          returnKeyType="next"
+          onSubmitEditing={() => passwordTextboxRef.current?.focus()}
+          blurOnSubmit={false}
+        />
         <Textbox
           label="Пароль"
+          autoCapitalize="none"
+          secureTextEntry={true}
           value={password}
           onChangeText={setPassword}
-          secureTextEntry={true}
+          returnKeyType="done"
+          onSubmitEditing={signIn}
+          ref={passwordTextboxRef}
         />
         <Button
           containerStyle={styles.authBtn}
