@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.border,
     padding: 12,
     gap: 4,
+    minWidth: "100%",
   },
   completed: {
     flexDirection: "row",
