@@ -18,6 +18,9 @@ import IconSend from "./IconSend";
 import IconNote from "./IconNote";
 import IconClipboardList from "./IconClipboardList";
 import IconClearAll from "./IconClearAll";
+import IconRotate2 from "./IconRotate2";
+import IconDeviceFloppy from "./IconDeviceFloppy";
+import IconArrowLeft from "./IconArrowLeft";
 
 export {
   IconChevronDown,
@@ -40,4 +43,7 @@ export {
   IconNote,
   IconClipboardList,
   IconClearAll,
+  IconRotate2,
+  IconDeviceFloppy,
+  IconArrowLeft,
 };
