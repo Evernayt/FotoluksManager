@@ -7,23 +7,26 @@ import {
   View,
 } from "react-native";
 import { IconBell, IconClearAll } from "../assets/icons";
-import { COLORS, SIZES } from "../constants/theme";
+import { COLORS } from "../constants/theme";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useEffect, useState } from "react";
 import { employeeSlice } from "../store/reducers/EmployeeSlice";
 import NotificationAPI from "../api/NotificationAPI/NotificationAPI";
-import Modal from "react-native-modal";
 import { IFlatListData } from "../models/IFlatListData";
 import { INotification } from "../models/api/INotification";
 import { getDateDiff } from "../helpers";
 import { APPS } from "../constants/app";
 import IconButton, { IconButtonVarians } from "./UI/IconButton";
 import Loader from "./UI/Loader";
+import SwipeableModal from "./UI/SwipeableModal";
+
+const limit = 25;
 
 const NotificationButton = () => {
   const [pageCount, setPageCount] = useState<number>(1);
   const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const [isShowing, setIsShowing] = useState<boolean>(false);
 
   const notifications = useAppSelector((state) => state.employee.notifications);
@@ -36,24 +39,14 @@ const NotificationButton = () => {
 
   useEffect(() => {
     dispatch(employeeSlice.actions.clearNotifications());
-    fetchNotifications(page);
+    fetchNotifications();
   }, []);
 
-  // useEffect(() => {
-  //   if (isLoading || !isVisible) return;
-
-  //   setIsLoading(true);
-  //   setPage((prevState) => prevState + 1);
-  //   fetchNotifications(page + 1);
-  // }, [isVisible]);
-
-  const fetchNotifications = (page: number) => {
+  const fetchNotifications = () => {
     if (employee) {
-      const limit = 25;
-
       NotificationAPI.getAll({
         limit,
-        page,
+        page: 1,
         employeeId: employee.id,
       })
         .then((data) => {
@@ -63,6 +56,20 @@ const NotificationButton = () => {
         })
         .finally(() => setIsLoading(false));
     }
+  };
+
+  const fetchMoreNotifications = () => {
+    if (page >= pageCount) return;
+
+    setIsLoadingMore(true);
+    const nextPage = page + 1;
+    setPage(nextPage);
+
+    NotificationAPI.getAll({ limit, page: nextPage, employeeId: employee?.id })
+      .then((data) => {
+        dispatch(employeeSlice.actions.addNotifications(data.rows));
+      })
+      .finally(() => setIsLoadingMore(false));
   };
 
   const deleteAllNotifications = () => {
@@ -84,6 +91,26 @@ const NotificationButton = () => {
 
   const closeModal = () => {
     setIsShowing(false);
+  };
+
+  const renderLoader = () => {
+    return isLoadingMore ? (
+      <View style={styles.footerLoader}>
+        <Loader />
+      </View>
+    ) : null;
+  };
+
+  const modalLeftTitleSection = () => {
+    return (
+      notifications.length > 0 && (
+        <IconButton
+          variant={IconButtonVarians.link}
+          icon={<IconClearAll color={COLORS.linkIcon} />}
+          onPress={deleteAllNotifications}
+        />
+      )
+    );
   };
 
   const renderNotification = (data: IFlatListData<INotification>) => {
@@ -111,47 +138,33 @@ const NotificationButton = () => {
 
   return (
     <>
-      <Modal
-        isVisible={isShowing}
-        style={{ margin: 0 }}
-        onSwipeComplete={closeModal}
-        swipeDirection={"down"}
-        useNativeDriver={false}
-        propagateSwipe={true}
+      <SwipeableModal
+        title="Уведомления"
+        isShowing={isShowing}
+        hide={closeModal}
+        leftTitleSection={modalLeftTitleSection()}
+        titleStyle={styles.modalTitle}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.panel}>
-            <View style={styles.titleContainer}>
-              <View style={styles.swipeLine} />
-              <Text style={styles.title}>Уведомления</Text>
-              {notifications.length > 0 && (
-                <IconButton
-                  containerStyle={styles.clearBtn}
-                  variant={IconButtonVarians.link}
-                  icon={<IconClearAll color={COLORS.linkIcon} />}
-                  onPress={deleteAllNotifications}
-                />
-              )}
-            </View>
-            {isLoading ? (
-              <Loader containerStyle={styles.loader} />
+        {isLoading ? (
+          <Loader containerStyle={styles.loader} />
+        ) : (
+          <>
+            {notifications.length ? (
+              <FlatList
+                data={notifications}
+                keyExtractor={(item) => `${item.id}`}
+                renderItem={renderNotification}
+                showsVerticalScrollIndicator={false}
+                ListFooterComponent={renderLoader}
+                onEndReached={fetchMoreNotifications}
+                onEndReachedThreshold={0}
+              />
             ) : (
-              <>
-                {notifications.length ? (
-                  <FlatList
-                    data={notifications}
-                    keyExtractor={(item) => `${item.id}`}
-                    renderItem={renderNotification}
-                    showsVerticalScrollIndicator={false}
-                  />
-                ) : (
-                  <Text style={styles.message}>Нет уведомлений</Text>
-                )}
-              </>
+              <Text style={styles.message}>Нет уведомлений</Text>
             )}
-          </View>
-        </View>
-      </Modal>
+          </>
+        )}
+      </SwipeableModal>
       <TouchableOpacity style={styles.btn} onPress={openModal}>
         {notificationsBadge && <View style={styles.badge} />}
         <IconBell color={COLORS.linkIcon} />
@@ -161,40 +174,8 @@ const NotificationButton = () => {
 };
 
 const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-  panel: {
-    maxHeight: "80%",
-    backgroundColor: COLORS.cardBackground,
-    borderTopLeftRadius: SIZES.borderRadius,
-    borderTopRightRadius: SIZES.borderRadius,
-    paddingHorizontal: 12,
-    paddingBottom: 24,
-  },
-  swipeLine: {
-    height: 6,
-    width: 50,
-    borderRadius: 3,
-    backgroundColor: COLORS.border,
-    position: "absolute",
-    top: -12,
-  },
-  titleContainer: {
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 18,
-    marginVertical: 24,
-    color: COLORS.primaryText,
-    fontWeight: "500",
-  },
-  clearBtn: {
-    position: "absolute",
-    right: 0,
+  modalTitle: {
+    marginLeft: 0,
   },
   loader: {
     paddingVertical: 36,
@@ -248,6 +229,9 @@ const styles = StyleSheet.create({
   },
   notificationText: {
     color: COLORS.primaryText,
+  },
+  footerLoader: {
+    marginVertical: 12,
   },
 });
 
