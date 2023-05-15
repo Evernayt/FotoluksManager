@@ -44,15 +44,18 @@ const Task: FC<TaskProps> = ({ task }) => {
           <Text style={styles.completedText}>Завершено</Text>
         </View>
       )}
-      <Text
-        style={[styles.title, task.completed && styles.completedTitle]}
-        numberOfLines={2}
-      >{`${task.id}. ${task.title}`}</Text>
+      <View style={styles.titleContainer}>
+        <Text
+          style={[styles.title, task.completed && styles.completedTitle]}
+          numberOfLines={2}
+        >{`${task.id}. ${task.title}`}</Text>
+        {task.urgent && <Text style={styles.urgent}>Срочно</Text>}
+      </View>
+
       {!task.completed && (
         <Text style={styles.description}>{task.description}</Text>
       )}
       <View style={styles.info}>
-        {task.urgent && <Text style={styles.urgent}>Срочно</Text>}
         <View style={styles.item}>
           <IconCalendarDue
             strokeWidth={1.25}
@@ -115,10 +118,23 @@ const styles = StyleSheet.create({
     color: COLORS.completedText,
     fontWeight: "500",
   },
+  titleContainer: {
+    flexDirection: 'row',
+  },
   title: {
     fontWeight: "500",
     color: COLORS.primaryText,
     fontSize: 15,
+    flex: 1
+  },
+  urgent: {
+    backgroundColor: COLORS.danger,
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+    borderRadius: 4,
+    color: "white",
+    alignSelf: 'flex-start',
+    marginLeft: 4
   },
   completedTitle: {
     color: COLORS.secondaryText,
@@ -133,13 +149,6 @@ const styles = StyleSheet.create({
     columnGap: 8,
     rowGap: 4,
     flexWrap: "wrap",
-  },
-  urgent: {
-    backgroundColor: COLORS.danger,
-    paddingVertical: 2,
-    paddingHorizontal: 6,
-    borderRadius: 4,
-    color: "white",
   },
   item: {
     flexDirection: "row",
