@@ -12,6 +12,8 @@ import AvatarList from "./UI/AvatarList";
 import Modal from "./UI/Modal";
 import Search from "./UI/Search";
 import NotificationButton from "./NotificationButton";
+import SwipeableModal from "./UI/SwipeableModal";
+import NavHeader from "./NavHeader";
 
 export {
   Button,
@@ -28,4 +30,6 @@ export {
   Modal,
   Search,
   NotificationButton,
+  SwipeableModal,
+  NavHeader,
 };
