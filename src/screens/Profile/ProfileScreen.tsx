@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { defaultAvatar } from "../../constants/images";
 import { COLORS } from "../../constants/theme";
-import { Button } from "../../components";
+import { Button, NavHeader } from "../../components";
 import { ButtonVarians } from "../../components/UI/Button";
 import { employeeSlice } from "../../store/reducers/EmployeeSlice";
 import { appSlice } from "../../store/reducers/AppSlice";
@@ -36,6 +36,7 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
+      <NavHeader title="Профиль" />
       <View>
         <Image
           style={styles.avatar}
@@ -59,13 +60,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "space-between",
-    padding: 24,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
   },
   avatar: {
     width: 144,
     height: 144,
     borderRadius: 72,
-    marginTop: 120,
   },
   name: {
     fontWeight: "500",
