@@ -25,7 +25,6 @@ const Tasks = () => {
   const filter = useAppSelector((state) => state.task.filter);
   const search = useAppSelector((state) => state.task.search);
   const forceUpdate = useAppSelector((state) => state.task.forceUpdate);
-  const activeShop = useAppSelector((state) => state.app.activeShop);
 
   const tasksFilterModal = useModal();
 
@@ -47,9 +46,9 @@ const Tasks = () => {
       fetchTasks(filter);
     } else if (filter.isPendingDeactivation) {
       dispatch(taskSlice.actions.deactiveFilter());
-      fetchTasks({ shopIds: [1, activeShop.id] });
+      fetchTasks();
     } else if (forceUpdate) {
-      fetchTasks({ shopIds: [1, activeShop.id] });
+      fetchTasks();
     }
     dispatch(taskSlice.actions.setForceUpdate(false));
   }, [forceUpdate]);
