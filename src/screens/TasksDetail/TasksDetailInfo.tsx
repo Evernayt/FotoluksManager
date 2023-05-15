@@ -10,6 +10,7 @@ import TaskAPI from "../../api/TaskAPI/TaskAPI";
 import {
   AvatarList,
   Button,
+  IconButton,
   KeyboardAvoidingWrapper,
   Loader,
   SelectButton,
@@ -19,16 +20,22 @@ import {
 import { ButtonVarians } from "../../components/UI/Button";
 import { COLORS, SIZES } from "../../constants/theme";
 import TasksDetailExecutor from "./TasksDetailExecutor";
-import { IconBinaryTree, IconStore } from "../../assets/icons";
+import {
+  IconBinaryTree,
+  IconDeviceFloppy,
+  IconRotate2,
+  IconStore,
+} from "../../assets/icons";
 import { IAvatarListItem } from "../../components/UI/AvatarList";
 import TaskDetailMembersModal from "./Modals/MembersModal/TaskDetailMembersModal";
 import { useModal } from "../../hooks";
 import TaskDetailCancelModal from "./Modals/TaskDetailCancelModal";
 import TasksDetailComments from "./TasksDetailComments";
+import { IconButtonVarians } from "../../components/UI/IconButton";
 
 interface TasksDetailInfoProps {
   isLoading: boolean;
-  saveTask: () => void;
+  saveTask: (close: boolean) => void;
 }
 
 const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
@@ -189,11 +196,21 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
         <View style={styles.items}>
           {task.urgent && <Text style={styles.urgent}>Срочно</Text>}
           <View style={styles.item}>
-            <IconStore color={COLORS.secondaryText} />
+            <IconStore
+              strokeWidth={1.25}
+              width={20}
+              height={20}
+              color={COLORS.secondaryText}
+            />
             <Text style={styles.itemText}>{shop?.abbreviation}</Text>
           </View>
           <View style={styles.item}>
-            <IconBinaryTree color={COLORS.secondaryText} />
+            <IconBinaryTree
+              strokeWidth={1.25}
+              width={20}
+              height={20}
+              color={COLORS.secondaryText}
+            />
             <Text style={styles.itemText}>{department?.name}</Text>
           </View>
           <View style={styles.item}>
@@ -250,13 +267,28 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
           <View style={styles.panel}>
             <View style={styles.controls}>
               {haveUnsavedData && (
-                <Button text="Отменить" onPress={openCancelModal} />
+                <IconButton
+                  containerStyle={styles.controlIcon}
+                  icon={
+                    <IconRotate2
+                      color={COLORS.secondaryIcon}
+                      onPress={openCancelModal}
+                    />
+                  }
+                />
               )}
+              <IconButton
+                containerStyle={styles.controlIcon}
+                variant={IconButtonVarians.primary}
+                disabled={!haveUnsavedData}
+                icon={<IconDeviceFloppy color={COLORS.secondaryIcon} />}
+                onPress={() => saveTask(false)}
+              />
               <Button
-                text="Сохранить"
+                text="Сохранить и выйти"
                 variant={ButtonVarians.primary}
                 disabled={!haveUnsavedData}
-                onPress={saveTask}
+                onPress={() => saveTask(true)}
               />
             </View>
           </View>
@@ -285,6 +317,10 @@ const styles = StyleSheet.create({
   controls: {
     flexDirection: "row",
     gap: 8,
+  },
+  controlIcon: {
+    height: 48,
+    width: 48,
   },
   inputs: {
     gap: 8,

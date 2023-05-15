@@ -58,19 +58,23 @@ const TasksDetailScreen = () => {
   }, [haveUnsavedData]);
 
   const handleBackButtonPress = () => {
-    return closeTaskDetail();
+    return checkUnsavedDataAndCloseTaskDetail();
   };
 
-  const closeTaskDetail = () => {
+  const checkUnsavedDataAndCloseTaskDetail = () => {
     if (haveUnsavedData) {
       unsavedDataModal.toggle();
       return false;
     } else {
-      dispatch(taskSlice.actions.clearTask());
-      dispatch(taskSlice.actions.setForceUpdate(true));
-      navigation.goBack();
+      closeTaskDetail();
       return true;
     }
+  };
+
+  const closeTaskDetail = () => {
+    dispatch(taskSlice.actions.clearTask());
+    dispatch(taskSlice.actions.setForceUpdate(true));
+    navigation.goBack();
   };
 
   const fetchTask = (taskId: number) => {
@@ -139,7 +143,7 @@ const TasksDetailScreen = () => {
     notifyMembersEdit(task);
   };
 
-  const saveTask = () => {
+  const saveTask = (close: boolean = false) => {
     if (!isValidationSuccess() || !haveUnsavedData || !employee) return;
 
     setIsLoading(true);
@@ -188,6 +192,10 @@ const TasksDetailScreen = () => {
         )
         .finally(() => setIsLoading(false));
     }
+
+    if (close) {
+      closeTaskDetail();
+    }
   };
 
   return (
@@ -198,7 +206,9 @@ const TasksDetailScreen = () => {
         saveTask={saveTask}
       />
       <View style={styles.container}>
-        <TasksDetailHeader closeTaskDetail={closeTaskDetail} />
+        <TasksDetailHeader
+          closeTaskDetail={checkUnsavedDataAndCloseTaskDetail}
+        />
         <TasksDetailInfo isLoading={isLoading} saveTask={saveTask} />
       </View>
     </>
