@@ -1,15 +1,9 @@
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
-import Modal from "react-native-modal";
 import { FC, useEffect, useState } from "react";
 import { IconChevronDown } from "../../assets/icons";
 import { IFlatListData } from "../../models/IFlatListData";
+import SwipeableModal from "./SwipeableModal";
 
 export interface ISelectItem {
   id: number;
@@ -61,30 +55,15 @@ const SelectButton: FC<SelectButtonProps> = ({
 
   const renderItems = () => {
     return (
-      <Modal
-        isVisible={isShowing}
-        style={{ margin: 0 }}
-        onSwipeComplete={closeModal}
-        swipeDirection={"down"}
-        useNativeDriver={true}
-        propagateSwipe={true}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.panel}>
-            <View style={styles.titleContainer}>
-              <View style={styles.swipeLine} />
-              <Text style={styles.title}>{title}</Text>
-            </View>
-            <FlatList
-              data={items}
-              keyExtractor={(item) => `${item.id}`}
-              renderItem={renderItem}
-              contentContainerStyle={{ gap: 4 }}
-              showsVerticalScrollIndicator={false}
-            />
-          </View>
-        </View>
-      </Modal>
+      <SwipeableModal title={title} isShowing={isShowing} hide={closeModal}>
+        <FlatList
+          data={items}
+          keyExtractor={(item) => `${item.id}`}
+          renderItem={renderItem}
+          contentContainerStyle={{ gap: 4 }}
+          showsVerticalScrollIndicator={false}
+        />
+      </SwipeableModal>
     );
   };
 
@@ -135,35 +114,6 @@ const styles = StyleSheet.create({
   iconDown: {
     position: "absolute",
     right: 24,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-  panel: {
-    maxHeight: "60%",
-    backgroundColor: COLORS.cardBackground,
-    borderTopLeftRadius: SIZES.borderRadius,
-    borderTopRightRadius: SIZES.borderRadius,
-    paddingHorizontal: 12,
-    paddingBottom: 24,
-  },
-  swipeLine: {
-    height: 6,
-    width: 50,
-    borderRadius: 3,
-    backgroundColor: COLORS.border,
-    position: "absolute",
-    top: -12,
-  },
-  titleContainer: {
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 18,
-    marginVertical: 24,
-    color: COLORS.primaryText,
-    fontWeight: "500",
   },
   item: {
     backgroundColor: COLORS.secondary,

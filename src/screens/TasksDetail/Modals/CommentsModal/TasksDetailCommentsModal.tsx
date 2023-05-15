@@ -2,7 +2,6 @@ import { FC, memo, useState } from "react";
 import Modal from "react-native-modal";
 import {
   FlatList,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -15,7 +14,7 @@ import { IFlatListData } from "../../../../models/IFlatListData";
 import { ITaskMessage } from "../../../../models/api/ITaskMessage";
 import TaskDetailCommentItemRight from "./TaskDetailCommentItemRight";
 import TaskDetailCommentItemLeft from "./TaskDetailCommentItemLeft";
-import { IconButton } from "../../../../components";
+import { IconButton, SwipeableModal } from "../../../../components";
 import { IconSend } from "../../../../assets/icons";
 import { CreateTaskMessageDto } from "../../../../api/TaskMessageAPI/dto/create-task-message.dto";
 import TaskMessageAPI from "../../../../api/TaskMessageAPI/TaskMessageAPI";
@@ -93,85 +92,47 @@ const TasksDetailCommentsModal: FC<TasksDetailCommentsModalProps> = ({
   };
 
   return (
-    <Modal
-      isVisible={isShowing}
-      style={{ margin: 0 }}
-      onSwipeComplete={hide}
-      swipeDirection={"down"}
-      useNativeDriver={false}
-      propagateSwipe={true}
+    <SwipeableModal
+      title="Комментарии"
+      isShowing={isShowing}
+      hide={hide}
+      panelStyle={styles.modalPanel}
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.panel}>
-          <View style={styles.titleContainer}>
-            <View style={styles.swipeLine} />
-            <Text style={styles.title}>Комментарии</Text>
-          </View>
-          <FlatList
-            data={taskMessages}
-            keyExtractor={(item) => `${item.id}`}
-            renderItem={renderMessageItem}
-            showsVerticalScrollIndicator={false}
-            inverted
+      <>
+        <FlatList
+          data={taskMessages}
+          keyExtractor={(item) => `${item.id}`}
+          renderItem={renderMessageItem}
+          showsVerticalScrollIndicator={false}
+          inverted
+        />
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={[styles.messageInput, { height: Math.max(25, inputHeight) }]}
+            placeholder="Введите комментарий"
+            placeholderTextColor={COLORS.secondaryText}
+            value={text}
+            onChangeText={setText}
+            multiline={true}
+            onContentSizeChange={(event) =>
+              setInputHeight(event.nativeEvent.contentSize.height)
+            }
           />
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={[
-                styles.messageInput,
-                { height: Math.max(25, inputHeight) },
-              ]}
-              placeholder="Введите комментарий"
-              placeholderTextColor={COLORS.secondaryText}
-              value={text}
-              onChangeText={setText}
-              multiline={true}
-              onContentSizeChange={(event) =>
-                setInputHeight(event.nativeEvent.contentSize.height)
-              }
-            />
-            <IconButton
-              containerStyle={styles.sendBtn}
-              icon={
-                <IconSend style={styles.sendIcon} color={COLORS.linkIcon} />
-              }
-              onPress={sendMessage}
-            />
-          </View>
+          <IconButton
+            containerStyle={styles.sendBtn}
+            icon={<IconSend style={styles.sendIcon} color={COLORS.linkIcon} />}
+            onPress={sendMessage}
+          />
         </View>
-      </View>
-    </Modal>
+      </>
+    </SwipeableModal>
   );
 };
 
 const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-  panel: {
+  modalPanel: {
     height: "80%",
-    backgroundColor: COLORS.cardBackground,
-    borderTopLeftRadius: SIZES.borderRadius,
-    borderTopRightRadius: SIZES.borderRadius,
-    paddingHorizontal: 12,
-    paddingBottom: 12,
-  },
-  swipeLine: {
-    height: 6,
-    width: 50,
-    borderRadius: 3,
-    backgroundColor: COLORS.border,
-    position: "absolute",
-    top: -12,
-  },
-  titleContainer: {
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 18,
-    marginVertical: 24,
-    color: COLORS.primaryText,
-    fontWeight: "500",
+    maxHeight: "80%",
   },
   messageItem: {
     paddingBottom: 8,

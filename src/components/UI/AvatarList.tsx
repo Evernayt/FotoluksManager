@@ -8,9 +8,9 @@ import {
   View,
 } from "react-native";
 import { defaultAvatar } from "../../constants/images";
-import { COLORS, SIZES } from "../../constants/theme";
-import Modal from "react-native-modal";
+import { COLORS } from "../../constants/theme";
 import { IFlatListData } from "../../models/IFlatListData";
+import SwipeableModal from "./SwipeableModal";
 
 export interface IAvatarListItem {
   id: number;
@@ -53,30 +53,15 @@ const AvatarList: FC<AvatarListProps> = ({
 
   return (
     <>
-      <Modal
-        isVisible={isShowing}
-        style={{ margin: 0 }}
-        onSwipeComplete={closeModal}
-        swipeDirection={"down"}
-        useNativeDriver={false}
-        propagateSwipe={true}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.panel}>
-            <View style={styles.titleContainer}>
-              <View style={styles.swipeLine} />
-              <Text style={styles.title}>{title}</Text>
-            </View>
-            <FlatList
-              data={items}
-              keyExtractor={(item) => `${item.id}`}
-              renderItem={renderItem}
-              contentContainerStyle={{ gap: 12 }}
-              showsVerticalScrollIndicator={false}
-            />
-          </View>
-        </View>
-      </Modal>
+      <SwipeableModal title={title} isShowing={isShowing} hide={closeModal}>
+        <FlatList
+          data={items}
+          keyExtractor={(item) => `${item.id}`}
+          renderItem={renderItem}
+          contentContainerStyle={{ gap: 12 }}
+          showsVerticalScrollIndicator={false}
+        />
+      </SwipeableModal>
       <TouchableOpacity style={styles.container} onPress={openModal}>
         {items.map((item) => (
           <Image
@@ -104,35 +89,6 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     resizeMode: "cover",
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-  panel: {
-    maxHeight: "60%",
-    backgroundColor: COLORS.background,
-    borderTopLeftRadius: SIZES.borderRadius,
-    borderTopRightRadius: SIZES.borderRadius,
-    paddingHorizontal: 12,
-    paddingBottom: 24,
-  },
-  swipeLine: {
-    height: 6,
-    width: 50,
-    borderRadius: 3,
-    backgroundColor: COLORS.border,
-    position: "absolute",
-    top: -12,
-  },
-  titleContainer: {
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 18,
-    marginVertical: 24,
-    color: COLORS.primaryText,
-    fontWeight: "500",
-  },
   text: {
     fontSize: 18,
     color: COLORS.primaryText,
@@ -141,13 +97,13 @@ const styles = StyleSheet.create({
   item: {
     paddingHorizontal: 16,
     flexDirection: "row",
-    alignItems: 'center',
+    alignItems: "center",
   },
   itemImage: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    marginRight: 16
+    marginRight: 16,
   },
 });
 
