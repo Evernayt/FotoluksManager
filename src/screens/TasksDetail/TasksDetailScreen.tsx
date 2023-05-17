@@ -101,11 +101,15 @@ const TasksDetailScreen = () => {
       const title = "Добавлен в участники";
       const text = `${employee?.name} добавил вас в участники задачи № ${task.id}`;
 
-      NotificationAPI.create({ title, text, employeeIds, appId: 4 }).then(
-        (data) => {
-          socketio.sendNotification(data);
-        }
-      );
+      NotificationAPI.create({
+        title,
+        text,
+        employeeIds,
+        appId: 4,
+        notificationCategoryId: 1,
+      }).then((data) => {
+        socketio.sendNotification(data);
+      });
     }
 
     if (taskMembersForDelete.length) {
@@ -117,6 +121,7 @@ const TasksDetailScreen = () => {
         text,
         employeeIds: taskMembersForDelete,
         appId: 4,
+        notificationCategoryId: 1,
       }).then((data) => {
         socketio.sendNotification(data);
       });
