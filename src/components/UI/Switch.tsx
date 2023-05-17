@@ -4,15 +4,16 @@ import {
   SwitchProps as RNSwitchProps,
 } from "react-native-switch";
 import { COLORS } from "../../constants/theme";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, StyleProp, ViewStyle } from "react-native";
 
 interface SwitchProps extends RNSwitchProps {
   label: string;
+  containerStyle?: StyleProp<ViewStyle>;
 }
 
-const Switch: FC<SwitchProps> = ({ label, ...props }) => {
+const Switch: FC<SwitchProps> = ({ label, containerStyle, ...props }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       <RNSwitch
         circleBorderWidth={3}
         circleBorderActiveColor={COLORS.primary}
@@ -33,13 +34,15 @@ const Switch: FC<SwitchProps> = ({ label, ...props }) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
   },
   label: {
     fontWeight: "500",
     color: COLORS.secondaryText,
     fontSize: 16,
-    marginLeft: 8
+    marginLeft: 8,
+    flex: 1,
+    top: 3,
   },
 });
 
