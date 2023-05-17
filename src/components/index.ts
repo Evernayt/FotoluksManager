@@ -14,6 +14,9 @@ import Search from "./UI/Search";
 import NotificationButton from "./NotificationButton";
 import SwipeableModal from "./UI/SwipeableModal";
 import NavHeader from "./NavHeader";
+import TabBar from "./TabBar";
+import TabButton from "./TabButton";
+import DatePicker from "./UI/DatePicker";
 
 export {
   Button,
@@ -32,4 +35,7 @@ export {
   NotificationButton,
   SwipeableModal,
   NavHeader,
+  TabBar,
+  TabButton,
+  DatePicker,
 };
