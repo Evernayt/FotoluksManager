@@ -2,17 +2,17 @@ import { configureStore } from "@reduxjs/toolkit";
 import AppSlice from "./reducers/AppSlice";
 import EmployeeSlice from "./reducers/EmployeeSlice";
 import TaskSlice from "./reducers/TaskSlice";
+import OrderSlice from "./reducers/OrderSlice";
 //import ModalSlice from "./reducers/ModalSlice";
 //import ControlPanelSlice from './reducers/ControlPanelSlice';
-// import OrderSlice from './reducers/OrderSlice';
 
 const store = configureStore({
   reducer: {
     app: AppSlice,
     employee: EmployeeSlice,
     task: TaskSlice,
+    order: OrderSlice,
     //modal: ModalSlice,
-    //order: OrderSlice,
     //controlPanel: ControlPanelSlice,
   },
 });
