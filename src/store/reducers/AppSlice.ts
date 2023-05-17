@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IShop } from "../../models/api/IShop";
 import {
   GlobalMessageVariants,
   IGlobalMessage,
 } from "../../models/IGlobalMessage";
+import { IPushNotifications } from "../../models/IPushNotifications";
 
 type AppState = {
   globalMessage: IGlobalMessage;
   notificationsBadge: boolean;
+  pushNotifications: IPushNotifications;
 };
 
 const initialState: AppState = {
@@ -17,6 +18,13 @@ const initialState: AppState = {
     isShowing: false,
   },
   notificationsBadge: false,
+  pushNotifications: {
+    addedOrRemovedFromMembers: { value: true },
+    taskComments: { value: true },
+    taskStatusChanged: { value: true },
+    orderStatusChanged: { value: false },
+    orderChanged: { value: false },
+  },
 };
 
 export const appSlice = createSlice({
@@ -28,6 +36,9 @@ export const appSlice = createSlice({
     },
     setNoificationsBadge(state, action: PayloadAction<boolean>) {
       state.notificationsBadge = action.payload;
+    },
+    setPushNotifications(state, action: PayloadAction<IPushNotifications>) {
+      state.pushNotifications = action.payload;
     },
     clearState(state) {
       state.notificationsBadge = initialState.notificationsBadge;

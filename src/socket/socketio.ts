@@ -3,9 +3,12 @@ import { INotification } from "../models/api/INotification";
 import { IOrder } from "../models/api/IOrder";
 import { IWatcher } from "../models/IWatcher";
 import { io, Socket } from "socket.io-client";
+import PushNotification from "react-native-push-notification";
 import store from "../store";
 import { appSlice } from "../store/reducers/AppSlice";
 import { employeeSlice } from "../store/reducers/EmployeeSlice";
+import { NOTIF_CHANEL_ID } from "../constants/app";
+import { IPushNotifications } from "../models/IPushNotifications";
 //import { orderSlice } from "../store/reducers/OrderSlice";
 
 let socket: Socket;
@@ -33,6 +36,20 @@ const isConnected = () => {
 
 const subscribeToNotifications = () => {
   socket.on("getNotification", (notification: INotification) => {
+    const pushNotifications = store.getState().app.pushNotifications;
+    for (const key in pushNotifications) {
+      const element = pushNotifications[key as keyof IPushNotifications];
+      if (element.id === notification.notificationCategory?.id) {
+        if (element.value) {
+          PushNotification.localNotification({
+            channelId: NOTIF_CHANEL_ID,
+            title: notification.title,
+            message: notification.text,
+          });
+        }
+      }
+    }
+
     store.dispatch(employeeSlice.actions.addNotification(notification));
     store.dispatch(appSlice.actions.setNoificationsBadge(true));
   });

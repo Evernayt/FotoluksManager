@@ -11,11 +11,12 @@ import { employeeSlice } from "../../store/reducers/EmployeeSlice";
 import { NavigationProps } from "../../../App";
 import { showGlobalMessage } from "../../components/GlobalMessage";
 import { ButtonVarians } from "../../components/UI/Button";
-import { getToken } from "../../helpers/asyncStorage";
+import { getPushNotifications, getToken } from "../../helpers/asyncStorage";
 import socketio from "../../socket/socketio";
 import jwtDecode from "jwt-decode";
 import { IEmployee } from "../../models/api/IEmployee";
 import SplashScreen from "react-native-splash-screen";
+import { appSlice } from "../../store/reducers/AppSlice";
 
 const LoginScreen = () => {
   const [login, setLogin] = useState<string>("");
@@ -28,6 +29,12 @@ const LoginScreen = () => {
   const navigation = useNavigation<NavigationProps>();
 
   useEffect(() => {
+    getPushNotifications().then((pushNotifications) => {
+      if (pushNotifications) {
+        dispatch(appSlice.actions.setPushNotifications(pushNotifications));
+      }
+    });
+
     autoSignIn();
   }, []);
 
