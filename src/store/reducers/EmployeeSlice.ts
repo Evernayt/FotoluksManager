@@ -5,11 +5,15 @@ import { INotification } from "../../models/api/INotification";
 type EmployeeState = {
   employee: IEmployee | null;
   notifications: INotification[];
+  notificationsPage: number;
+  notificationsPageCount: number;
 };
 
 const initialState: EmployeeState = {
   employee: null,
   notifications: [],
+  notificationsPage: 1,
+  notificationsPageCount: 1,
 };
 
 export const employeeSlice = createSlice({
@@ -31,6 +35,12 @@ export const employeeSlice = createSlice({
     },
     updateEmployee(state, action: PayloadAction<IEmployee>) {
       state.employee = action.payload;
+    },
+    setNotificationsPage(state, action: PayloadAction<number>) {
+      state.notificationsPage = action.payload;
+    },
+    setNotificationsPageCount(state, action: PayloadAction<number>) {
+      state.notificationsPageCount = action.payload;
     },
     clearState() {
       return initialState;

@@ -23,13 +23,15 @@ import SwipeableModal from "./UI/SwipeableModal";
 const limit = 25;
 
 const NotificationButton = () => {
-  const [pageCount, setPageCount] = useState<number>(1);
-  const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const [isShowing, setIsShowing] = useState<boolean>(false);
 
   const notifications = useAppSelector((state) => state.employee.notifications);
+  const page = useAppSelector((state) => state.employee.notificationsPage);
+  const pageCount = useAppSelector(
+    (state) => state.employee.notificationsPageCount
+  );
   const employee = useAppSelector((state) => state.employee.employee);
   const notificationsBadge = useAppSelector(
     (state) => state.app.notificationsBadge
@@ -52,7 +54,7 @@ const NotificationButton = () => {
         .then((data) => {
           dispatch(employeeSlice.actions.addNotifications(data.rows));
           const count = Math.ceil(data.count / limit);
-          setPageCount(count);
+          dispatch(employeeSlice.actions.setNotificationsPageCount(count));
         })
         .finally(() => setIsLoading(false));
     }
@@ -63,7 +65,7 @@ const NotificationButton = () => {
 
     setIsLoadingMore(true);
     const nextPage = page + 1;
-    setPage(nextPage);
+    dispatch(employeeSlice.actions.setNotificationsPage(nextPage));
 
     NotificationAPI.getAll({ limit, page: nextPage, employeeId: employee?.id })
       .then((data) => {
@@ -78,8 +80,8 @@ const NotificationButton = () => {
       NotificationAPI.deleteByEmployeeId(employee.id)
         .then(() => {
           dispatch(employeeSlice.actions.clearNotifications());
-          setPage(1);
-          setPageCount(1);
+          dispatch(employeeSlice.actions.setNotificationsPage(1));
+          dispatch(employeeSlice.actions.setNotificationsPageCount(1));
         })
         .finally(() => setIsLoading(false));
     }
@@ -103,13 +105,12 @@ const NotificationButton = () => {
 
   const modalLeftTitleSection = () => {
     return (
-      notifications.length > 0 && (
-        <IconButton
-          variant={IconButtonVarians.link}
-          icon={<IconClearAll color={COLORS.linkIcon} />}
-          onPress={deleteAllNotifications}
-        />
-      )
+      <IconButton
+        variant={IconButtonVarians.link}
+        icon={<IconClearAll color={COLORS.linkIcon} />}
+        disabled={!notifications.length}
+        onPress={deleteAllNotifications}
+      />
     );
   };
 
