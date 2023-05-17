@@ -21,6 +21,9 @@ import IconClearAll from "./IconClearAll";
 import IconRotate2 from "./IconRotate2";
 import IconDeviceFloppy from "./IconDeviceFloppy";
 import IconArrowLeft from "./IconArrowLeft";
+import IconSettings from "./IconSettings";
+import IconSum from "./IconSum";
+import IconCalendarTime from "./IconCalendarTime";
 
 export {
   IconChevronDown,
@@ -46,4 +49,7 @@ export {
   IconRotate2,
   IconDeviceFloppy,
   IconArrowLeft,
+  IconSettings,
+  IconSum,
+  IconCalendarTime,
 };
