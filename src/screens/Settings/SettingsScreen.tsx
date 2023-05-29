@@ -13,8 +13,15 @@ const SettingsScreen = () => {
 
   const dispatch = useAppDispatch();
 
-  const notifValueChange = (value: boolean, key: keyof IPushNotifications) => {
-    const data: IPushNotifications = { ...pushNotifications, [key]: { value } };
+  const notifValueChange = (
+    value: boolean,
+    id: number,
+    key: keyof IPushNotifications
+  ) => {
+    const data: IPushNotifications = {
+      ...pushNotifications,
+      [key]: { value, id },
+    };
 
     dispatch(appSlice.actions.setPushNotifications(data));
     setPushNotifications(data);
@@ -29,21 +36,35 @@ const SettingsScreen = () => {
           label="Вы добавлены или удалены из участников"
           value={pushNotifications.addedOrRemovedFromMembers.value}
           onValueChange={(value) =>
-            notifValueChange(value, "addedOrRemovedFromMembers")
+            notifValueChange(
+              value,
+              pushNotifications.addedOrRemovedFromMembers.id,
+              "addedOrRemovedFromMembers"
+            )
           }
         />
         <Switch
           containerStyle={styles.switchContainer}
           label="Комментарии от других сотрудников, из задач в которых вы участвуете"
           value={pushNotifications.taskComments.value}
-          onValueChange={(value) => notifValueChange(value, "taskComments")}
+          onValueChange={(value) =>
+            notifValueChange(
+              value,
+              pushNotifications.taskComments.id,
+              "taskComments"
+            )
+          }
         />
         <Switch
           containerStyle={styles.switchContainer}
           label="Изменен статус задачи"
           value={pushNotifications.taskStatusChanged.value}
           onValueChange={(value) =>
-            notifValueChange(value, "taskStatusChanged")
+            notifValueChange(
+              value,
+              pushNotifications.taskStatusChanged.id,
+              "taskStatusChanged"
+            )
           }
         />
         <Switch
@@ -51,14 +72,24 @@ const SettingsScreen = () => {
           label="Изменен статус заказа"
           value={pushNotifications.orderStatusChanged.value}
           onValueChange={(value) =>
-            notifValueChange(value, "orderStatusChanged")
+            notifValueChange(
+              value,
+              pushNotifications.orderStatusChanged.id,
+              "orderStatusChanged"
+            )
           }
         />
         <Switch
           containerStyle={styles.switchContainer}
           label="Изменен заказ"
           value={pushNotifications.orderChanged.value}
-          onValueChange={(value) => notifValueChange(value, "orderChanged")}
+          onValueChange={(value) =>
+            notifValueChange(
+              value,
+              pushNotifications.orderChanged.id,
+              "orderChanged"
+            )
+          }
         />
       </ScrollView>
     </View>

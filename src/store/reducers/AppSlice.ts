@@ -19,11 +19,11 @@ const initialState: AppState = {
   },
   notificationsBadge: false,
   pushNotifications: {
-    addedOrRemovedFromMembers: { value: true },
-    taskComments: { value: true },
-    taskStatusChanged: { value: true },
-    orderStatusChanged: { value: false },
-    orderChanged: { value: false },
+    addedOrRemovedFromMembers: { value: true, id: 1 },
+    taskComments: { value: true, id: 2 },
+    taskStatusChanged: { value: true, id: 3 },
+    orderStatusChanged: { value: false, id: 4 },
+    orderChanged: { value: false, id: 5 },
   },
 };
 

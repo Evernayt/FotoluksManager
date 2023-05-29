@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "746747660248",
+    "project_id": "fotoluks-manager",
+    "storage_bucket": "fotoluks-manager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746747660248:android:102c1c0d674fca7edd14ad",
+        "android_client_info": {
+          "package_name": "com.fotoluksmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746747660248-gf4tb0hij0j55aj671nqpiio3l5r3k71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbCXlj97z12Xd9RLvM8taUek7D9a81kHA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746747660248-gf4tb0hij0j55aj671nqpiio3l5r3k71.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

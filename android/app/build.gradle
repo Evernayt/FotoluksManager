@@ -1,5 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
+apply plugin: "com.google.gms.google-services"
 
 import com.android.build.OutputFile
 
@@ -98,8 +99,8 @@ android {
         applicationId "com.fotoluksmanager"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
     }
 
     splits {
@@ -154,7 +155,7 @@ dependencies {
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
 
-    implementation project(':react-native-splash-screen')
+    implementation project(":react-native-splash-screen")
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {

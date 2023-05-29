@@ -108,7 +108,7 @@ const TasksDetailScreen = () => {
         appId: 4,
         notificationCategoryId: 1,
       }).then((data) => {
-        socketio.sendNotification(data);
+        socketio.sendNotification(data, employeeIds);
       });
     }
 
@@ -123,7 +123,7 @@ const TasksDetailScreen = () => {
         appId: 4,
         notificationCategoryId: 1,
       }).then((data) => {
-        socketio.sendNotification(data);
+        socketio.sendNotification(data, taskMembersForDelete);
       });
     }
   };

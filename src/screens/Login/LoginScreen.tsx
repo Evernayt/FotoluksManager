@@ -11,12 +11,17 @@ import { employeeSlice } from "../../store/reducers/EmployeeSlice";
 import { NavigationProps } from "../../../App";
 import { showGlobalMessage } from "../../components/GlobalMessage";
 import { ButtonVarians } from "../../components/UI/Button";
-import { getPushNotifications, getToken } from "../../helpers/asyncStorage";
-import socketio from "../../socket/socketio";
+import {
+  getPushNotifications,
+  getToken,
+  setEmployee,
+} from "../../helpers/asyncStorage";
 import jwtDecode from "jwt-decode";
 import { IEmployee } from "../../models/api/IEmployee";
 import SplashScreen from "react-native-splash-screen";
 import { appSlice } from "../../store/reducers/AppSlice";
+import { notificationListener, subscribeTopic } from "../../firebase/messaging";
+import socketio from "../../socket/socketio";
 
 const LoginScreen = () => {
   const [login, setLogin] = useState<string>("");
@@ -41,18 +46,7 @@ const LoginScreen = () => {
   const signIn = () => {
     setIsLoading(true);
     AuthAPI.login({ login, password })
-      .then((data) => {
-        const apps = getApps(data.apps);
-        if (!apps.length) {
-          showGlobalMessage("Нет доступных приложений");
-          return;
-        }
-
-        socketio.connect();
-
-        dispatch(employeeSlice.actions.signIn(data));
-        navigation.replace("HOME_ROUTE");
-      })
+      .then((data) => loggedIn(data))
       .catch((e) => {
         showGlobalMessage(
           e.response.data ? e.response.data.message : e.message
@@ -68,18 +62,7 @@ const LoginScreen = () => {
       } else {
         const lastEmployee: IEmployee = jwtDecode(token);
         AuthAPI.checkAuth(lastEmployee.login)
-          .then((data) => {
-            const apps = getApps(data.apps);
-            if (!apps.length) {
-              showGlobalMessage("Нет доступных приложений");
-              return;
-            }
-
-            socketio.connect();
-
-            dispatch(employeeSlice.actions.signIn(data));
-            navigation.replace("HOME_ROUTE");
-          })
+          .then((data) => loggedIn(data))
           .catch((e) =>
             showGlobalMessage(
               e.response.data ? e.response.data.message : e.message
@@ -88,6 +71,23 @@ const LoginScreen = () => {
           .finally(() => SplashScreen.hide());
       }
     });
+  };
+
+  const loggedIn = (employee: IEmployee) => {
+    const apps = getApps(employee.apps);
+    if (!apps.length) {
+      showGlobalMessage("Нет доступных приложений");
+      return;
+    }
+    setEmployee(employee);
+
+    socketio.connect();
+
+    subscribeTopic("fotoluks-manager");
+    notificationListener(employee);
+
+    dispatch(employeeSlice.actions.signIn(employee));
+    navigation.replace("HOME_ROUTE");
   };
 
   return (

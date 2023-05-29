@@ -1,5 +1,6 @@
 import {
   FlatList,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableHighlight,
@@ -15,17 +16,17 @@ import NotificationAPI from "../api/NotificationAPI/NotificationAPI";
 import { IFlatListData } from "../models/IFlatListData";
 import { INotification } from "../models/api/INotification";
 import { getDateDiff } from "../helpers";
-import { APPS } from "../constants/app";
+import { APPS, NOTIF_LIMIT } from "../constants/app";
 import IconButton, { IconButtonVarians } from "./UI/IconButton";
 import Loader from "./UI/Loader";
 import SwipeableModal from "./UI/SwipeableModal";
-
-const limit = 25;
+import { appSlice } from "../store/reducers/AppSlice";
 
 const NotificationButton = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const [isShowing, setIsShowing] = useState<boolean>(false);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   const notifications = useAppSelector((state) => state.employee.notifications);
   const page = useAppSelector((state) => state.employee.notificationsPage);
@@ -40,23 +41,25 @@ const NotificationButton = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(employeeSlice.actions.clearNotifications());
     fetchNotifications();
   }, []);
 
   const fetchNotifications = () => {
     if (employee) {
       NotificationAPI.getAll({
-        limit,
+        limit: NOTIF_LIMIT,
         page: 1,
         employeeId: employee.id,
       })
         .then((data) => {
-          dispatch(employeeSlice.actions.addNotifications(data.rows));
-          const count = Math.ceil(data.count / limit);
+          dispatch(employeeSlice.actions.setNotifications(data.rows));
+          const count = Math.ceil(data.count / NOTIF_LIMIT);
           dispatch(employeeSlice.actions.setNotificationsPageCount(count));
         })
-        .finally(() => setIsLoading(false));
+        .finally(() => {
+          setIsLoading(false);
+          setIsRefreshing(false);
+        });
     }
   };
 
@@ -67,9 +70,18 @@ const NotificationButton = () => {
     const nextPage = page + 1;
     dispatch(employeeSlice.actions.setNotificationsPage(nextPage));
 
-    NotificationAPI.getAll({ limit, page: nextPage, employeeId: employee?.id })
+    NotificationAPI.getAll({
+      limit: NOTIF_LIMIT,
+      page: nextPage,
+      employeeId: employee?.id,
+    })
       .then((data) => {
-        dispatch(employeeSlice.actions.addNotifications(data.rows));
+        dispatch(
+          employeeSlice.actions.setNotifications([
+            ...notifications,
+            ...data.rows,
+          ])
+        );
       })
       .finally(() => setIsLoadingMore(false));
   };
@@ -79,7 +91,7 @@ const NotificationButton = () => {
       setIsLoading(true);
       NotificationAPI.deleteByEmployeeId(employee.id)
         .then(() => {
-          dispatch(employeeSlice.actions.clearNotifications());
+          dispatch(employeeSlice.actions.setNotifications([]));
           dispatch(employeeSlice.actions.setNotificationsPage(1));
           dispatch(employeeSlice.actions.setNotificationsPageCount(1));
         })
@@ -89,10 +101,16 @@ const NotificationButton = () => {
 
   const openModal = () => {
     setIsShowing(true);
+    dispatch(appSlice.actions.setNoificationsBadge(false));
   };
 
   const closeModal = () => {
     setIsShowing(false);
+  };
+
+  const refresh = () => {
+    setIsRefreshing(true);
+    fetchNotifications();
   };
 
   const renderLoader = () => {
@@ -115,8 +133,7 @@ const NotificationButton = () => {
   };
 
   const renderNotification = (data: IFlatListData<INotification>) => {
-    const Icon =
-      APPS.find((x) => x.value === data.item.app?.value)?.Icon || View;
+    const Icon = APPS.find((x) => x.id === data.item.appId)?.Icon || View;
 
     return (
       <TouchableHighlight>
@@ -159,6 +176,12 @@ const NotificationButton = () => {
                 ListFooterComponent={renderLoader}
                 onEndReached={fetchMoreNotifications}
                 onEndReachedThreshold={0}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={isRefreshing}
+                    onRefresh={refresh}
+                  />
+                }
               />
             ) : (
               <Text style={styles.message}>Нет уведомлений</Text>
