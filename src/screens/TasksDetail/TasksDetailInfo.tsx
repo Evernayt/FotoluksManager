@@ -120,6 +120,18 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
     dispatch(taskSlice.actions.setUrgent(!urgent));
   };
 
+  const taskCompletedRender = () => {
+    return task.completed ? (
+      <TasksDetailExecutor />
+    ) : (
+      <Button
+        text="Завершить"
+        variant={ButtonVarians.primaryDeemphasized}
+        onPress={completeTask}
+      />
+    );
+  };
+
   const editingRender = () => {
     return (
       <>
@@ -128,19 +140,7 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
           hide={taskMembersModal.toggle}
         />
         <View style={styles.inputs}>
-          {isTaskCreated && (
-            <>
-              {task.completed ? (
-                <TasksDetailExecutor />
-              ) : (
-                <Button
-                  text="Завершить"
-                  variant={ButtonVarians.primaryDeemphasized}
-                  onPress={completeTask}
-                />
-              )}
-            </>
-          )}
+          {isTaskCreated && taskCompletedRender()}
           <Textarea
             label="Что не так"
             labelBgColor={COLORS.cardBackground}
@@ -184,15 +184,7 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
   const readingRender = () => {
     return (
       <>
-        {task.completed ? (
-          <TasksDetailExecutor />
-        ) : (
-          <Button
-            text="Завершить"
-            variant={ButtonVarians.primaryDeemphasized}
-            onPress={completeTask}
-          />
-        )}
+        {taskCompletedRender()}
         <View style={styles.items}>
           {task.urgent && <Text style={styles.urgent}>Срочно</Text>}
           <View style={styles.item}>
