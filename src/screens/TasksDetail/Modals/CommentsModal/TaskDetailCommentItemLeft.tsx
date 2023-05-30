@@ -5,6 +5,7 @@ import { COLORS, SIZES } from "../../../../constants/theme";
 import moment from "moment";
 import { DEF_DATE_FORMAT } from "../../../../constants/app";
 import { defaultAvatar } from "../../../../constants/images";
+import { Linkify } from "../../../../components";
 
 interface TaskDetailCommentItemLeftProps {
   taskMessage: ITaskMessage;
@@ -28,7 +29,7 @@ const TaskDetailCommentItemLeft: FC<TaskDetailCommentItemLeftProps> = ({
       <View>
         <Text style={styles.name}>{taskMessage.employee.name}</Text>
         <View style={styles.section}>
-          <Text style={styles.message}>{taskMessage.message}</Text>
+          <Linkify>{taskMessage.message}</Linkify>
           <Text style={styles.date}>{created}</Text>
         </View>
       </View>
@@ -61,9 +62,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: SIZES.borderRadius,
     borderTopLeftRadius: SIZES.borderRadius,
     borderBottomRightRadius: SIZES.borderRadius,
-  },
-  message: {
-    color: COLORS.primaryText,
   },
   date: {
     color: COLORS.secondaryText,

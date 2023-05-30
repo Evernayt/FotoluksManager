@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import moment from "moment";
 import { DEF_DATE_FORMAT } from "../../../../constants/app";
 import { COLORS, SIZES } from "../../../../constants/theme";
+import { Linkify } from "../../../../components";
 
 interface TaskDetailCommentItemRightProps {
   taskMessage: ITaskMessage;
@@ -17,7 +18,7 @@ const TaskDetailCommentItemRight: FC<TaskDetailCommentItemRightProps> = ({
   return (
     <View style={styles.container}>
       <View style={styles.section}>
-        <Text style={styles.message}>{taskMessage.message}</Text>
+        <Linkify>{taskMessage.message}</Linkify>
         <Text style={styles.date}>{created}</Text>
       </View>
     </View>
@@ -36,9 +37,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: SIZES.borderRadius,
     borderBottomLeftRadius: SIZES.borderRadius,
     maxWidth: "80%",
-  },
-  message: {
-    color: COLORS.primaryText,
   },
   date: {
     color: COLORS.secondaryText,

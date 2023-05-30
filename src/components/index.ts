@@ -17,6 +17,9 @@ import NavHeader from "./NavHeader";
 import TabBar from "./TabBar";
 import TabButton from "./TabButton";
 import DatePicker from "./UI/DatePicker";
+import Linkify from "./UI/Linkify";
+import UpdaterModal from "./UpdaterModal";
+import Progress from "./UI/Progress";
 
 export {
   Button,
@@ -38,4 +41,7 @@ export {
   TabBar,
   TabButton,
   DatePicker,
+  Linkify,
+  UpdaterModal,
+  Progress,
 };

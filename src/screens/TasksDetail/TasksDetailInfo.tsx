@@ -12,12 +12,13 @@ import {
   Button,
   IconButton,
   KeyboardAvoidingWrapper,
+  Linkify,
   Loader,
   SelectButton,
   Switch,
   Textarea,
 } from "../../components";
-import { ButtonVarians } from "../../components/UI/Button";
+import { ButtonVariants } from "../../components/UI/Button";
 import { COLORS, SIZES } from "../../constants/theme";
 import TasksDetailExecutor from "./TasksDetailExecutor";
 import {
@@ -31,7 +32,7 @@ import TaskDetailMembersModal from "./Modals/MembersModal/TaskDetailMembersModal
 import { useModal } from "../../hooks";
 import TaskDetailCancelModal from "./Modals/TaskDetailCancelModal";
 import TasksDetailComments from "./TasksDetailComments";
-import { IconButtonVarians } from "../../components/UI/IconButton";
+import { IconButtonVariants } from "../../components/UI/IconButton";
 
 interface TasksDetailInfoProps {
   isLoading: boolean;
@@ -126,7 +127,7 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
     ) : (
       <Button
         text="Завершить"
-        variant={ButtonVarians.primaryDeemphasized}
+        variant={ButtonVariants.primaryDeemphasized}
         onPress={completeTask}
       />
     );
@@ -214,11 +215,11 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
 
         <View>
           <Text style={styles.title}>Что не так</Text>
-          <Text style={styles.text}>{title}</Text>
+          <Linkify>{title}</Linkify>
         </View>
         <View>
           <Text style={styles.title}>Что сделать</Text>
-          <Text style={styles.text}>{description}</Text>
+          <Linkify>{description}</Linkify>
         </View>
         {taskMembers.length > 0 && (
           <View>
@@ -271,14 +272,14 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
               )}
               <IconButton
                 containerStyle={styles.controlIcon}
-                variant={IconButtonVarians.primary}
+                variant={IconButtonVariants.primary}
                 disabled={!haveUnsavedData}
                 icon={<IconDeviceFloppy color={COLORS.secondaryIcon} />}
                 onPress={() => saveTask(false)}
               />
               <Button
                 text="Сохранить и выйти"
-                variant={ButtonVarians.primary}
+                variant={ButtonVariants.primary}
                 disabled={!haveUnsavedData}
                 onPress={() => saveTask(true)}
               />
@@ -343,9 +344,6 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: COLORS.primaryText,
     marginBottom: 2,
-  },
-  text: {
-    color: COLORS.primaryText,
   },
 });
 
