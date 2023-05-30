@@ -24,7 +24,7 @@ import { useEffect, useMemo } from "react";
 import { NOTIF_CHANEL_ID } from "./src/constants/app";
 import { useAppSelector } from "./src/hooks/redux";
 import { getApps } from "./src/helpers";
-import { TabBar } from "./src/components";
+import { TabBar, UpdaterModal } from "./src/components";
 
 type RootStackParamList = {
   LOGIN_ROUTE: undefined;
@@ -77,6 +77,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <GlobalMessage />
+      <UpdaterModal />
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName={LOGIN_ROUTE}

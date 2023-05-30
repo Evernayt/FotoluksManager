@@ -4,11 +4,18 @@ import {
   IGlobalMessage,
 } from "../../models/IGlobalMessage";
 import { IPushNotifications } from "../../models/IPushNotifications";
+import { IUpdate } from "../../models/IUpdate";
+import {
+  INITIAL_CHECK_UPDATE,
+  INITIAL_DOWNLOAD_UPDATE,
+} from "../../constants/states/update-states";
 
 type AppState = {
   globalMessage: IGlobalMessage;
   notificationsBadge: boolean;
   pushNotifications: IPushNotifications;
+  checkUpdate: IUpdate;
+  downloadUpdate: IUpdate;
 };
 
 const initialState: AppState = {
@@ -25,6 +32,8 @@ const initialState: AppState = {
     orderStatusChanged: { value: false, id: 4 },
     orderChanged: { value: false, id: 5 },
   },
+  checkUpdate: INITIAL_CHECK_UPDATE,
+  downloadUpdate: INITIAL_DOWNLOAD_UPDATE,
 };
 
 export const appSlice = createSlice({
@@ -39,6 +48,16 @@ export const appSlice = createSlice({
     },
     setPushNotifications(state, action: PayloadAction<IPushNotifications>) {
       state.pushNotifications = action.payload;
+    },
+    setCheckUpdate(state, action: PayloadAction<IUpdate>) {
+      state.checkUpdate.pending = action.payload.pending || false;
+      state.checkUpdate.success = action.payload.success || false;
+      state.checkUpdate.failure = action.payload.failure || false;
+    },
+    setDownloadUpdate(state, action: PayloadAction<IUpdate>) {
+      state.downloadUpdate.pending = action.payload.pending || false;
+      state.downloadUpdate.success = action.payload.success || false;
+      state.downloadUpdate.failure = action.payload.failure || false;
     },
     clearState(state) {
       state.notificationsBadge = initialState.notificationsBadge;

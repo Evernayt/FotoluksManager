@@ -6,16 +6,16 @@ import { IconClose } from "../../assets/icons";
 import { COLORS, SIZES } from "../../constants/theme";
 
 interface ModalProps {
-  hide: () => void;
   children: ReactNode;
+  hide?: () => void;
   title?: string;
   isShowing?: boolean;
   panelStyle?: StyleProp<ViewStyle>;
 }
 
 const Modal: FC<ModalProps> = ({
-  hide,
   children,
+  hide,
   title,
   isShowing,
   panelStyle,
@@ -28,14 +28,18 @@ const Modal: FC<ModalProps> = ({
       useNativeDriver={true}
     >
       <View style={styles.container}>
-        <View style={[styles.panel, panelStyle]}>
+        <View style={[styles.panel, panelStyle ? panelStyle : { flex: 0.5 }]}>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>{title}</Text>
-            <IconButton
-              containerStyle={styles.closeBtn}
-              circle
-              icon={<IconClose color={COLORS.secondaryIcon} onPress={hide} />}
-            />
+            <Text style={[styles.title, { marginLeft: hide ? 40 : 0 }]}>
+              {title}
+            </Text>
+            {hide && (
+              <IconButton
+                containerStyle={styles.closeBtn}
+                circle
+                icon={<IconClose color={COLORS.secondaryIcon} onPress={hide} />}
+              />
+            )}
           </View>
           <View style={styles.childrenContainer}>{children}</View>
         </View>
@@ -66,9 +70,10 @@ const styles = StyleSheet.create({
     color: COLORS.primaryText,
     fontWeight: "500",
     textAlign: "center",
+    textAlignVertical: "center",
     fontSize: 18,
     flex: 1,
-    marginLeft: 40,
+    height: 40,
   },
   closeBtn: {
     marginLeft: "auto",
