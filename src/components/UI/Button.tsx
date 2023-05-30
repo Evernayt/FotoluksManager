@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
 
-export enum ButtonVarians {
+export enum ButtonVariants {
   primary = "primary",
   primaryDeemphasized = "primaryDeemphasized",
   secondary = "secondary",
@@ -17,7 +17,7 @@ export enum ButtonVarians {
 
 interface ButtonProps extends TouchableOpacityProps {
   text: string;
-  variant?: ButtonVarians;
+  variant?: ButtonVariants;
   containerStyle?: StyleProp<ViewStyle>;
   isLoading?: boolean;
   loadingText?: string;
@@ -25,7 +25,7 @@ interface ButtonProps extends TouchableOpacityProps {
 
 const Button: FC<ButtonProps> = ({
   text,
-  variant = ButtonVarians.secondary,
+  variant = ButtonVariants.secondary,
   containerStyle,
   isLoading,
   loadingText = "Загрузка...",

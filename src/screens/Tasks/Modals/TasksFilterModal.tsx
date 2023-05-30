@@ -9,7 +9,7 @@ import { ALL_DEPARTMENTS } from "../../../constants/states/department-states";
 import { taskSlice } from "../../../store/reducers/TaskSlice";
 import { Button, Modal, SelectButton, Switch } from "../../../components";
 import { StyleSheet, View } from "react-native";
-import { ButtonVarians } from "../../../components/UI/Button";
+import { ButtonVariants } from "../../../components/UI/Button";
 
 interface TasksFilterModalProps {
   isShowing: boolean;
@@ -155,7 +155,7 @@ const TasksFilterModal: FC<TasksFilterModalProps> = ({ isShowing, hide }) => {
         <Button text="Очистить" onPress={clear} />
         <Button
           text="Готово"
-          variant={ButtonVarians.primary}
+          variant={ButtonVariants.primary}
           onPress={filter}
         />
       </View>

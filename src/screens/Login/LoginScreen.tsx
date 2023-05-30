@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { employeeSlice } from "../../store/reducers/EmployeeSlice";
 import { NavigationProps } from "../../../App";
 import { showGlobalMessage } from "../../components/GlobalMessage";
-import { ButtonVarians } from "../../components/UI/Button";
+import { ButtonVariants } from "../../components/UI/Button";
 import {
   getPushNotifications,
   getToken,
@@ -115,7 +115,7 @@ const LoginScreen = () => {
         />
         <Button
           containerStyle={styles.authBtn}
-          variant={ButtonVarians.primary}
+          variant={ButtonVariants.primary}
           disabled={login === "" || password === ""}
           isLoading={isLoading}
           loadingText="Авторизация..."

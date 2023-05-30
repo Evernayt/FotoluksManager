@@ -17,7 +17,7 @@ import { IFlatListData } from "../models/IFlatListData";
 import { INotification } from "../models/api/INotification";
 import { getDateDiff } from "../helpers";
 import { APPS, NOTIF_LIMIT } from "../constants/app";
-import IconButton, { IconButtonVarians } from "./UI/IconButton";
+import IconButton, { IconButtonVariants } from "./UI/IconButton";
 import Loader from "./UI/Loader";
 import SwipeableModal from "./UI/SwipeableModal";
 import { appSlice } from "../store/reducers/AppSlice";
@@ -124,7 +124,7 @@ const NotificationButton = () => {
   const modalLeftTitleSection = () => {
     return (
       <IconButton
-        variant={IconButtonVarians.link}
+        variant={IconButtonVariants.link}
         icon={<IconClearAll color={COLORS.linkIcon} />}
         disabled={!notifications.length}
         onPress={deleteAllNotifications}

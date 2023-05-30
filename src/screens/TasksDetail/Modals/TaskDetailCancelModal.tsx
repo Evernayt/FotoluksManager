@@ -3,7 +3,7 @@ import { useAppDispatch } from "../../../hooks/redux";
 import { taskSlice } from "../../../store/reducers/TaskSlice";
 import { Button, Modal } from "../../../components";
 import { StyleSheet, Text, View } from "react-native";
-import { ButtonVarians } from "../../../components/UI/Button";
+import { ButtonVariants } from "../../../components/UI/Button";
 import { COLORS } from "../../../constants/theme";
 
 interface TaskDetailCancelModalProps {
@@ -35,7 +35,7 @@ const TaskDetailCancelModal: FC<TaskDetailCancelModalProps> = ({
       </Text>
       <View style={styles.controls}>
         <Button text="Нет" onPress={hide} />
-        <Button text="Да" variant={ButtonVarians.primary} onPress={cancel} />
+        <Button text="Да" variant={ButtonVariants.primary} onPress={cancel} />
       </View>
     </Modal>
   );

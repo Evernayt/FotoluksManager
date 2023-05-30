@@ -1,6 +1,6 @@
 import { ReactNode, FC } from "react";
 import { Text, View, StyleSheet } from "react-native";
-import IconButton, { IconButtonVarians } from "./UI/IconButton";
+import IconButton, { IconButtonVariants } from "./UI/IconButton";
 import { IconClose } from "../assets/icons";
 import { COLORS } from "../constants/theme";
 
@@ -19,7 +19,7 @@ const DetailHeader: FC<DetailHeaderProps> = ({
     <View style={styles.container}>
       <IconButton
         icon={<IconClose color={COLORS.secondaryDarkIcon} />}
-        variant={IconButtonVarians.dark}
+        variant={IconButtonVariants.dark}
         circle
         onPress={onClose}
       />

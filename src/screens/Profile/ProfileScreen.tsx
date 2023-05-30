@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { defaultAvatar } from "../../constants/images";
 import { COLORS } from "../../constants/theme";
 import { Button, NavHeader } from "../../components";
-import { ButtonVarians } from "../../components/UI/Button";
+import { ButtonVariants } from "../../components/UI/Button";
 import { employeeSlice } from "../../store/reducers/EmployeeSlice";
 import { appSlice } from "../../store/reducers/AppSlice";
 import { taskSlice } from "../../store/reducers/TaskSlice";
@@ -47,7 +47,7 @@ const ProfileScreen = () => {
       </View>
       <Button
         text="Выйти из аккаунта"
-        variant={ButtonVarians.primary}
+        variant={ButtonVariants.primary}
         onPress={signOut}
       />
     </View>

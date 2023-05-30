@@ -11,7 +11,7 @@ import {
   Switch,
 } from "../../../components";
 import { StyleSheet, View } from "react-native";
-import { ButtonVarians } from "../../../components/UI/Button";
+import { ButtonVariants } from "../../../components/UI/Button";
 import { IStatus } from "../../../models/api/IStatus";
 import { orderSlice } from "../../../store/reducers/OrderSlice";
 import { ALL_STATUSES } from "../../../constants/states/status-states";
@@ -218,7 +218,7 @@ const OrdersFilterModal: FC<OrdersFilterModalProps> = ({ isShowing, hide }) => {
         <Button text="Очистить" onPress={clear} />
         <Button
           text="Готово"
-          variant={ButtonVarians.primary}
+          variant={ButtonVariants.primary}
           onPress={filter}
         />
       </View>

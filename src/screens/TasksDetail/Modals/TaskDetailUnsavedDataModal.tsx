@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { taskSlice } from "../../../store/reducers/TaskSlice";
 import { Button, Modal } from "../../../components";
 import { StyleSheet, Text, View } from "react-native";
-import { ButtonVarians } from "../../../components/UI/Button";
+import { ButtonVariants } from "../../../components/UI/Button";
 import { COLORS } from "../../../constants/theme";
 
 interface TaskDetailUnsavedDataModalProps {
@@ -45,7 +45,7 @@ const TaskDetailUnsavedDataModal: FC<TaskDetailUnsavedDataModalProps> = ({
         <Button text="Нет" onPress={closeTask} />
         <Button
           text="Да"
-          variant={ButtonVarians.primary}
+          variant={ButtonVariants.primary}
           onPress={saveTaskAndClose}
         />
       </View>

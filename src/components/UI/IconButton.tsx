@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
 
-export enum IconButtonVarians {
+export enum IconButtonVariants {
   primary = "primary",
   primaryDeemphasized = "primaryDeemphasized",
   secondary = "secondary",
@@ -18,14 +18,14 @@ export enum IconButtonVarians {
 
 interface IconButtonProps extends TouchableOpacityProps {
   icon: JSX.Element;
-  variant?: IconButtonVarians;
+  variant?: IconButtonVariants;
   containerStyle?: StyleProp<ViewStyle>;
   circle?: boolean;
 }
 
 const IconButton: FC<IconButtonProps> = ({
   icon,
-  variant = IconButtonVarians.secondary,
+  variant = IconButtonVariants.secondary,
   containerStyle,
   circle,
   ...props

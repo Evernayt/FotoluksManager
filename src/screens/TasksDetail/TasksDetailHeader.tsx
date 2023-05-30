@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { DEF_DATE_FORMAT } from "../../constants/app";
 import TaskAPI from "../../api/TaskAPI/TaskAPI";
 import { taskSlice } from "../../store/reducers/TaskSlice";
-import { IconButtonVarians } from "../../components/UI/IconButton";
+import { IconButtonVariants } from "../../components/UI/IconButton";
 import { IconTrash, IconTrashOff } from "../../assets/icons";
 import { COLORS } from "../../constants/theme";
 import { FC } from "react";
@@ -35,7 +35,7 @@ const TasksDetailHeader: FC<TasksDetailHeaderProps> = ({ closeTaskDetail }) => {
   const rightSection = () => {
     return task.creator?.id === employee?.id ? (
       <IconButton
-        variant={IconButtonVarians.link}
+        variant={IconButtonVariants.link}
         icon={
           task.archive ? (
             <IconTrashOff color={COLORS.linkIcon} />

@@ -2,7 +2,7 @@ import { View, StyleSheet } from "react-native";
 import { IconButton } from "../../components";
 import { COLORS } from "../../constants/theme";
 import { IconAdjustments, IconPlus, IconRefresh } from "../../assets/icons";
-import { IconButtonVarians } from "../../components/UI/IconButton";
+import { IconButtonVariants } from "../../components/UI/IconButton";
 import { FC } from "react";
 import { useAppSelector } from "../../hooks/redux";
 import { useNavigation } from "@react-navigation/native";
@@ -31,12 +31,12 @@ const TasksToolbar: FC<TasksToolbarProps> = ({
       <View style={styles.section}>
         <IconButton
           icon={<IconPlus color={COLORS.primaryIcon} />}
-          variant={IconButtonVarians.primary}
+          variant={IconButtonVariants.primary}
           onPress={newTask}
         />
         <IconButton
           icon={<IconRefresh color={COLORS.linkIcon} />}
-          variant={IconButtonVarians.link}
+          variant={IconButtonVariants.link}
           onPress={reload}
         />
       </View>
@@ -44,8 +44,8 @@ const TasksToolbar: FC<TasksToolbarProps> = ({
         icon={<IconAdjustments color={COLORS.linkIcon} />}
         variant={
           filter.isActive
-            ? IconButtonVarians.primaryDeemphasized
-            : IconButtonVarians.link
+            ? IconButtonVariants.primaryDeemphasized
+            : IconButtonVariants.link
         }
         onPress={openTasksFilterModal}
         disabled={disableFilter}

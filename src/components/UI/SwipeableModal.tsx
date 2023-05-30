@@ -2,7 +2,7 @@ import { FC, ReactNode } from "react";
 import { View, StyleSheet, Text, StyleProp, ViewStyle } from "react-native";
 import Modal from "react-native-modal";
 import { COLORS, SIZES } from "../../constants/theme";
-import IconButton, { IconButtonVarians } from "./IconButton";
+import IconButton, { IconButtonVariants } from "./IconButton";
 import { IconClose } from "../../assets/icons";
 
 interface SwipeableModalProps {
@@ -42,7 +42,7 @@ const SwipeableModal: FC<SwipeableModalProps> = ({
             {leftTitleSection}
             <Text style={[styles.title, titleStyle]}>{title}</Text>
             <IconButton
-              variant={IconButtonVarians.link}
+              variant={IconButtonVariants.link}
               containerStyle={styles.closeBtn}
               icon={<IconClose color={COLORS.linkIcon} onPress={hide} />}
             />
