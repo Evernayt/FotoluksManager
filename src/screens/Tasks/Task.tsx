@@ -48,7 +48,7 @@ const Task: FC<TaskProps> = ({ task }) => {
         <Text
           style={[styles.title, task.completed && styles.completedTitle]}
           numberOfLines={2}
-        >{`${task.id}. ${task.title}`}</Text>
+        >{`${task.id}. ${task.name || task.title}`}</Text>
         {task.urgent && <Text style={styles.urgent}>Срочно</Text>}
       </View>
 

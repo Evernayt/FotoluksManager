@@ -6,7 +6,7 @@ import TaskAPI from "../../api/TaskAPI/TaskAPI";
 import { taskSlice } from "../../store/reducers/TaskSlice";
 import { COLORS, SIZES } from "../../constants/theme";
 import { IconCheckFilled } from "../../assets/icons";
-import { Button } from "../../components";
+import { Button, Linkify } from "../../components";
 
 const TasksDetailExecutor = () => {
   const task = useAppSelector((state) => state.task.task);
@@ -21,6 +21,7 @@ const TasksDetailExecutor = () => {
       id: task.id,
       completed: false,
       completedDate: null,
+      completionNote: "",
       executorId: null,
     }).then((data) => {
       dispatch(taskSlice.actions.setTask(data));
@@ -37,6 +38,9 @@ const TasksDetailExecutor = () => {
       </View>
       <Text style={styles.text}>{`Исполнитель: ${task.executor?.name}`}</Text>
       <Text style={styles.text}>{`Дата и время: ${date}`}</Text>
+      {task.completionNote && (
+        <Linkify>{`Примечание: ${task.completionNote}`}</Linkify>
+      )}
       {(employee?.id === task.executor?.id ||
         employee?.id === task.creator?.id) && (
         <Button

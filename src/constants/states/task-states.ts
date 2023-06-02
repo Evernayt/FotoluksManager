@@ -1,15 +1,17 @@
-import { ITask } from '../../models/api/ITask';
-import { INITIAL_DEPARTMENT } from './department-states';
-import { INITIAL_SHOP } from './shop-states';
+import { ITask } from "../../models/api/ITask";
+import { INITIAL_DEPARTMENT } from "./department-states";
+import { INITIAL_SHOP } from "./shop-states";
 
 export const INITIAL_TASK: ITask = {
   id: 0,
-  title: '',
-  description: '',
+  name: "",
+  title: "",
+  description: "",
   urgent: false,
-  createdAt: '',
+  createdAt: "",
   completed: false,
-  completedDate: '',
+  completedDate: "",
+  completionNote: "",
   archive: false,
   shop: INITIAL_SHOP,
   department: INITIAL_DEPARTMENT,

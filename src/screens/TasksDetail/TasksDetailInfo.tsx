@@ -17,6 +17,7 @@ import {
   SelectButton,
   Switch,
   Textarea,
+  Textbox,
 } from "../../components";
 import { ButtonVariants } from "../../components/UI/Button";
 import { COLORS, SIZES } from "../../constants/theme";
@@ -37,14 +38,21 @@ import { IconButtonVariants } from "../../components/UI/IconButton";
 interface TasksDetailInfoProps {
   isLoading: boolean;
   saveTask: (close: boolean) => void;
+  closeTaskDetail: () => void;
 }
 
-const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
+const TasksDetailInfo: FC<TasksDetailInfoProps> = ({
+  isLoading,
+  saveTask,
+  closeTaskDetail,
+}) => {
   const [shops, setShops] = useState<IShop[]>([]);
   const [departments, setDepartments] = useState<IDepartment[]>([]);
+  const [completionNote, setCompletionNote] = useState<string>("");
 
   const task = useAppSelector((state) => state.task.task);
   const beforeTask = useAppSelector((state) => state.task.beforeTask);
+  const name = useAppSelector((state) => state.task.task.name);
   const title = useAppSelector((state) => state.task.task.title);
   const description = useAppSelector((state) => state.task.task.description);
   const shop = useAppSelector((state) => state.task.task.shop);
@@ -101,6 +109,7 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
       id: task.id,
       completed: true,
       completedDate: new Date().toUTCString(),
+      completionNote,
       executorId: employee?.id,
     }).then((data) => {
       dispatch(taskSlice.actions.setTask(data));
@@ -110,11 +119,11 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
   };
 
   const openCancelModal = () => {
-    cancelTaskModal.toggle();
+    cancelTaskModal.open();
   };
 
   const openTaskMembersModal = () => {
-    taskMembersModal.toggle();
+    taskMembersModal.open();
   };
 
   const toggleUrgent = () => {
@@ -125,11 +134,19 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
     return task.completed ? (
       <TasksDetailExecutor />
     ) : (
-      <Button
-        text="Завершить"
-        variant={ButtonVariants.primaryDeemphasized}
-        onPress={completeTask}
-      />
+      <View style={styles.panels}>
+        <Button
+          text="Завершить"
+          variant={ButtonVariants.primaryDeemphasized}
+          onPress={completeTask}
+        />
+        <Textbox
+          label="Примечание (необязательно)"
+          labelBgColor={COLORS.cardBackground}
+          value={completionNote}
+          onChangeText={setCompletionNote}
+        />
+      </View>
     );
   };
 
@@ -138,10 +155,15 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
       <>
         <TaskDetailMembersModal
           isShowing={taskMembersModal.isShowing}
-          hide={taskMembersModal.toggle}
+          hide={taskMembersModal.close}
         />
         <View style={styles.inputs}>
-          {isTaskCreated && taskCompletedRender()}
+          <Textbox
+            label="Заголовок"
+            labelBgColor={COLORS.cardBackground}
+            value={name}
+            onChangeText={(text) => dispatch(taskSlice.actions.setName(text))}
+          />
           <Textarea
             label="Что не так"
             labelBgColor={COLORS.cardBackground}
@@ -185,7 +207,6 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
   const readingRender = () => {
     return (
       <>
-        {taskCompletedRender()}
         <View style={styles.items}>
           {task.urgent && <Text style={styles.urgent}>Срочно</Text>}
           <View style={styles.item}>
@@ -213,6 +234,12 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
           </View>
         </View>
 
+        {name && (
+          <View>
+            <Text style={styles.title}>Заголовок</Text>
+            <Linkify>{name}</Linkify>
+          </View>
+        )}
         <View>
           <Text style={styles.title}>Что не так</Text>
           <Linkify>{title}</Linkify>
@@ -239,11 +266,14 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
     <>
       <TaskDetailCancelModal
         isShowing={cancelTaskModal.isShowing}
-        hide={cancelTaskModal.toggle}
+        hide={cancelTaskModal.close}
       />
       <View style={styles.container}>
         <KeyboardAvoidingWrapper>
           <View style={styles.panels}>
+            {isTaskCreated && (
+              <View style={styles.panel}>{taskCompletedRender()}</View>
+            )}
             <View style={styles.panel}>
               <View style={styles.info}>
                 {iCreator ? editingRender() : readingRender()}
@@ -270,19 +300,27 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({ isLoading, saveTask }) => {
                   }
                 />
               )}
-              <IconButton
-                containerStyle={styles.controlIcon}
-                variant={IconButtonVariants.primary}
-                disabled={!haveUnsavedData}
-                icon={<IconDeviceFloppy color={COLORS.secondaryIcon} />}
-                onPress={() => saveTask(false)}
-              />
-              <Button
-                text="Сохранить и выйти"
-                variant={ButtonVariants.primary}
-                disabled={!haveUnsavedData}
-                onPress={() => saveTask(true)}
-              />
+              {haveUnsavedData ? (
+                <>
+                  <IconButton
+                    containerStyle={styles.controlIcon}
+                    variant={IconButtonVariants.primary}
+                    icon={<IconDeviceFloppy color={COLORS.secondaryIcon} />}
+                    onPress={() => saveTask(false)}
+                  />
+                  <Button
+                    text="Сохранить и выйти"
+                    variant={ButtonVariants.primary}
+                    onPress={() => saveTask(true)}
+                  />
+                </>
+              ) : (
+                <Button
+                  text="Выйти"
+                  variant={ButtonVariants.primary}
+                  onPress={closeTaskDetail}
+                />
+              )}
             </View>
           </View>
         )}
