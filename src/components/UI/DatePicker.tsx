@@ -51,13 +51,11 @@ const DatePicker: FC<DatePickerProps> = ({ date, onChange, label }) => {
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: 48,
-    maxHeight: 48,
+    height: 48,
     borderRadius: SIZES.borderRadius,
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 16,
-    flex: 1,
     backgroundColor: COLORS.secondary,
   },
   label: {

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Button, Modal, Search } from "../../../../components";
+import { Button, Loader, Modal, Search } from "../../../../components";
 import { IEmployee } from "../../../../models/api/IEmployee";
 import { ITaskMember } from "../../../../models/api/ITaskMember";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/redux";
@@ -7,7 +7,7 @@ import EmployeeAPI from "../../../../api/EmployeeAPI/EmployeeAPI";
 import uuid from "react-native-uuid";
 import { taskSlice } from "../../../../store/reducers/TaskSlice";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { COLORS } from "../../../../constants/theme";
+import { COLORS, SIZES } from "../../../../constants/theme";
 import TaskDetailMemberItem from "./TaskDetailMemberItem";
 
 interface TaskDetailMembersModalProps {
@@ -148,68 +148,66 @@ const TaskDetailMembersModal: FC<TaskDetailMembersModalProps> = ({
   };
 
   return (
-    <Modal
-      title="Участники"
-      isShowing={isShowing}
-      hide={close}
-      panelStyle={styles.panel}
-    >
+    <Modal title="Участники" isShowing={isShowing} hide={close}>
       <View style={styles.container}>
-        <Search
-          value={search}
-          onChangeText={searchHandler}
-          placeholder="Поиск сотрудников"
-          showResults={false}
-        />
-        <View style={styles.employeesContainer}>
-          <View style={styles.section}>
-            <Text style={styles.title}>Участвуют</Text>
-            <FlatList
-              data={search !== "" ? foundTaskMembers : task.taskMembers}
-              keyExtractor={(item) => `${item.id}`}
-              renderItem={({ item }) => (
-                <TaskDetailMemberItem
-                  employee={item.employee}
-                  isAdded={true}
-                  onClick={() => deleteTaskMember(item)}
-                />
-              )}
-              contentContainerStyle={{ gap: 8 }}
-              showsVerticalScrollIndicator={false}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            <Search
+              value={search}
+              onChangeText={searchHandler}
+              placeholder="Поиск сотрудников"
+              showResults={false}
             />
-            <Button text="Удалить всех" onPress={deleteAllTaskMembers} />
-          </View>
-          <View style={styles.separator} />
-          <View style={styles.section}>
-            <Text style={styles.title}>Не участвуют</Text>
-            <FlatList
-              data={search !== "" ? foundEmployees : employees}
-              keyExtractor={(item) => `${item.id}`}
-              renderItem={({ item }) => (
-                <TaskDetailMemberItem
-                  employee={item}
-                  isAdded={false}
-                  onClick={() => addTaskMember(item)}
+            <View style={styles.employeesContainer}>
+              <View style={styles.section}>
+                <Text style={styles.title}>Участвуют</Text>
+                <FlatList
+                  data={search !== "" ? foundTaskMembers : task.taskMembers}
+                  keyExtractor={(item) => `${item.id}`}
+                  renderItem={({ item }) => (
+                    <TaskDetailMemberItem
+                      employee={item.employee}
+                      isAdded={true}
+                      onClick={() => deleteTaskMember(item)}
+                    />
+                  )}
+                  contentContainerStyle={{ gap: 8 }}
+                  showsVerticalScrollIndicator={false}
                 />
-              )}
-              contentContainerStyle={{ gap: 8 }}
-              showsVerticalScrollIndicator={false}
-            />
-            <Button text="Добавить всех" onPress={addAllTaskMembers} />
-          </View>
-        </View>
+                <Button text="Удалить всех" onPress={deleteAllTaskMembers} />
+              </View>
+              <View style={styles.separator} />
+              <View style={styles.section}>
+                <Text style={styles.title}>Не участвуют</Text>
+                <FlatList
+                  data={search !== "" ? foundEmployees : employees}
+                  keyExtractor={(item) => `${item.id}`}
+                  renderItem={({ item }) => (
+                    <TaskDetailMemberItem
+                      employee={item}
+                      isAdded={false}
+                      onClick={() => addTaskMember(item)}
+                    />
+                  )}
+                  contentContainerStyle={{ gap: 8 }}
+                  showsVerticalScrollIndicator={false}
+                />
+                <Button text="Добавить всех" onPress={addAllTaskMembers} />
+              </View>
+            </View>
+          </>
+        )}
       </View>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  panel: {
-    height: "80%",
-  },
   container: {
     gap: 16,
-    flex: 1,
+    height: SIZES.height / 1.5,
   },
   employeesContainer: {
     flexDirection: "row",

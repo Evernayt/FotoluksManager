@@ -33,12 +33,7 @@ const TaskDetailUnsavedDataModal: FC<TaskDetailUnsavedDataModalProps> = ({
   };
 
   return (
-    <Modal
-      title="Сохранить изменения?"
-      isShowing={isShowing}
-      hide={hide}
-      panelStyle={styles.panel}
-    >
+    <Modal title="Сохранить изменения?" isShowing={isShowing} hide={hide}>
       <Text style={styles.message}>Есть не сохраненные данные.</Text>
       <Button text="Продолжить редактирование" onPress={hide} />
       <View style={styles.controls}>
@@ -54,13 +49,10 @@ const TaskDetailUnsavedDataModal: FC<TaskDetailUnsavedDataModalProps> = ({
 };
 
 const styles = StyleSheet.create({
-  panel: {
-    height: 212,
-  },
   message: {
     color: COLORS.primaryText,
     textAlign: "center",
-    marginBottom: 16
+    marginBottom: 16,
   },
   controls: {
     flexDirection: "row",

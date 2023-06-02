@@ -23,26 +23,25 @@ const Modal: FC<ModalProps> = ({
   return (
     <RNModal
       isVisible={isShowing}
-      style={{ margin: 0 }}
+      style={styles.container}
       animationIn="fadeInUpBig"
       useNativeDriver={true}
+      onBackdropPress={hide}
     >
-      <View style={styles.container}>
-        <View style={[styles.panel, panelStyle ? panelStyle : { flex: 0.5 }]}>
-          <View style={styles.titleContainer}>
-            <Text style={[styles.title, { marginLeft: hide ? 40 : 0 }]}>
-              {title}
-            </Text>
-            {hide && (
-              <IconButton
-                containerStyle={styles.closeBtn}
-                circle
-                icon={<IconClose color={COLORS.secondaryIcon} onPress={hide} />}
-              />
-            )}
-          </View>
-          <View style={styles.childrenContainer}>{children}</View>
+      <View style={[styles.panel, panelStyle]}>
+        <View style={styles.titleContainer}>
+          <Text style={[styles.title, { marginLeft: hide ? 40 : 0 }]}>
+            {title}
+          </Text>
+          {hide && (
+            <IconButton
+              containerStyle={styles.closeBtn}
+              circle
+              icon={<IconClose color={COLORS.secondaryIcon} onPress={hide} />}
+            />
+          )}
         </View>
+        <View style={styles.childrenContainer}>{children}</View>
       </View>
     </RNModal>
   );
@@ -50,7 +49,7 @@ const Modal: FC<ModalProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    margin: 0,
     justifyContent: "flex-end",
     padding: 12,
   },
@@ -81,7 +80,6 @@ const styles = StyleSheet.create({
   },
   childrenContainer: {
     padding: 8,
-    flex: 1,
   },
 });
 

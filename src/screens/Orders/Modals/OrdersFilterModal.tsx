@@ -173,12 +173,7 @@ const OrdersFilterModal: FC<OrdersFilterModalProps> = ({ isShowing, hide }) => {
   };
 
   return (
-    <Modal
-      title="Фильтры заказов"
-      isShowing={isShowing}
-      hide={hide}
-      panelStyle={styles.modalPanel}
-    >
+    <Modal title="Фильтры заказов" isShowing={isShowing} hide={hide}>
       <View style={styles.container}>
         <SelectButton
           title="Статусы"
@@ -227,12 +222,8 @@ const OrdersFilterModal: FC<OrdersFilterModalProps> = ({ isShowing, hide }) => {
 };
 
 const styles = StyleSheet.create({
-  modalPanel: {
-    height: 392,
-  },
   container: {
     gap: 8,
-    flex: 1,
   },
   controls: {
     flexDirection: "row",

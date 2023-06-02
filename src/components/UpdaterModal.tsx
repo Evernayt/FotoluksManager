@@ -130,11 +130,7 @@ const UpdaterModal = () => {
   };
 
   return (
-    <Modal
-      title="Обновление"
-      isShowing={checkUpdate.success}
-      panelStyle={styles.panel}
-    >
+    <Modal title="Обновление" isShowing={checkUpdate.success}>
       <View style={styles.container}>
         <View>
           <Image style={styles.logo} source={logo} />
@@ -151,11 +147,7 @@ const UpdaterModal = () => {
 };
 
 const styles = StyleSheet.create({
-  panel: {
-    height: 320,
-  },
   container: {
-    flex: 1,
     justifyContent: "space-between",
   },
   logo: {

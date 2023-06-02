@@ -23,12 +23,7 @@ const TaskDetailCancelModal: FC<TaskDetailCancelModalProps> = ({
   };
 
   return (
-    <Modal
-      title="Отменить изменения?"
-      isShowing={isShowing}
-      hide={hide}
-      panelStyle={styles.panel}
-    >
+    <Modal title="Отменить изменения?" isShowing={isShowing} hide={hide}>
       <Text style={styles.message}>
         Вы уверены что хотите отменить все изменения?{`\n`}Не сохраненные данные
         будут удалены.
@@ -42,17 +37,14 @@ const TaskDetailCancelModal: FC<TaskDetailCancelModalProps> = ({
 };
 
 const styles = StyleSheet.create({
-  panel: {
-    height: 174,
-  },
   message: {
     color: COLORS.primaryText,
-    textAlign: 'center'
+    textAlign: "center",
   },
   controls: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 8,
-    marginTop: 16
+    marginTop: 16,
   },
 });
 

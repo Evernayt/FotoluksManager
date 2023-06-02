@@ -29,26 +29,25 @@ const SwipeableModal: FC<SwipeableModalProps> = ({
   return (
     <Modal
       isVisible={isShowing}
-      style={{ margin: 0 }}
+      style={styles.container}
       onSwipeComplete={hide}
       swipeDirection={"down"}
       useNativeDriver={useNativeDriver}
       propagateSwipe={true}
+      onBackdropPress={hide}
     >
-      <View style={styles.container}>
-        <View style={[styles.panel, panelStyle]}>
-          <View style={styles.titleContainer}>
-            <View style={styles.swipeLine} />
-            {leftTitleSection}
-            <Text style={[styles.title, titleStyle]}>{title}</Text>
-            <IconButton
-              variant={IconButtonVariants.link}
-              containerStyle={styles.closeBtn}
-              icon={<IconClose color={COLORS.linkIcon} onPress={hide} />}
-            />
-          </View>
-          {children}
+      <View style={[styles.panel, panelStyle]}>
+        <View style={styles.titleContainer}>
+          <View style={styles.swipeLine} />
+          {leftTitleSection}
+          <Text style={[styles.title, titleStyle]}>{title}</Text>
+          <IconButton
+            variant={IconButtonVariants.link}
+            containerStyle={styles.closeBtn}
+            icon={<IconClose color={COLORS.linkIcon} onPress={hide} />}
+          />
         </View>
+        {children}
       </View>
     </Modal>
   );
@@ -56,7 +55,7 @@ const SwipeableModal: FC<SwipeableModalProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    margin: 0,
     justifyContent: "flex-end",
   },
   panel: {
