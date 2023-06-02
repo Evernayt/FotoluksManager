@@ -12,6 +12,7 @@ import { Loader } from "../../components";
 import { COLORS } from "../../constants/theme";
 import TasksToolbar from "./TasksToolbar";
 import TasksFilterModal from "./Modals/TasksFilterModal";
+import { accessCheck } from "../../helpers";
 
 const limit = 25;
 
@@ -25,6 +26,8 @@ const Tasks = () => {
   const filter = useAppSelector((state) => state.task.filter);
   const search = useAppSelector((state) => state.task.search);
   const forceUpdate = useAppSelector((state) => state.task.forceUpdate);
+  const employee = useAppSelector((state) => state.employee.employee);
+  const selectedStatus = useAppSelector((state) => state.task.selectedStatus);
 
   const tasksFilterModal = useModal();
 
@@ -57,7 +60,13 @@ const Tasks = () => {
     dispatch(taskSlice.actions.setIsLoading(true));
     setPage(1);
 
-    TaskAPI.getAll({ ...filter, limit, page: 1 })
+    TaskAPI.getAll({
+      employeeId: accessCheck(employee, 1) ? undefined : employee?.id,
+      ...filter,
+      status: selectedStatus,
+      limit,
+      page: 1,
+    })
       .then((data) => {
         dispatch(taskSlice.actions.setTasks(data.rows));
         const count = Math.ceil(data.count / limit);
@@ -96,7 +105,13 @@ const Tasks = () => {
     const nextPage = page + 1;
     setPage(nextPage);
 
-    TaskAPI.getAll({ ...filter, limit, page: nextPage })
+    TaskAPI.getAll({
+      employeeId: accessCheck(employee, 1) ? undefined : employee?.id,
+      ...filter,
+      status: selectedStatus,
+      limit,
+      page: nextPage,
+    })
       .then((data) => {
         dispatch(taskSlice.actions.setTasks([...tasks, ...data.rows]));
       })
@@ -110,11 +125,11 @@ const Tasks = () => {
     <>
       <TasksFilterModal
         isShowing={tasksFilterModal.isShowing}
-        hide={tasksFilterModal.toggle}
+        hide={tasksFilterModal.close}
       />
       <TasksToolbar
         reload={reload}
-        openTasksFilterModal={tasksFilterModal.toggle}
+        openTasksFilterModal={tasksFilterModal.open}
       />
       <View style={styles.container}>
         {isLoading ? (
