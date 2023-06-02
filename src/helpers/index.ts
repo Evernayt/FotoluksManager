@@ -1,4 +1,5 @@
 import getApps from "./getApps";
 import getDateDiff from "./getDateDiff";
+import accessCheck from "./accessCheck";
 
-export { getApps, getDateDiff };
+export { getApps, getDateDiff, accessCheck };

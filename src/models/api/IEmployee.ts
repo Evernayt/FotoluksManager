@@ -1,8 +1,9 @@
-import { GetEmployeesDto } from '../../api/EmployeeAPI/dto/get-employees.dto';
-import { IData } from '../IData';
-import { IFilter } from '../IFilter';
-import { IApp } from './IApp';
-import { IDepartment } from './IDepartment';
+import { GetEmployeesDto } from "../../api/EmployeeAPI/dto/get-employees.dto";
+import { IData } from "../IData";
+import { IFilter } from "../IFilter";
+import { IApp } from "./IApp";
+import { IDepartment } from "./IDepartment";
+import { IRole } from "./IRole";
 
 export interface IEmployee {
   id: number;
@@ -12,6 +13,7 @@ export interface IEmployee {
   avatar?: string;
   apps?: IApp[];
   departments?: IDepartment[];
+  role?: IRole;
 }
 
 export type IEmployeeData = IData<IEmployee[]>;
