@@ -7,39 +7,30 @@ import { ALL_SHOPS } from "../../../constants/states/shop-states";
 import DepartmentAPI from "../../../api/DepartmentAPI/DepartmentAPI";
 import { ALL_DEPARTMENTS } from "../../../constants/states/department-states";
 import { taskSlice } from "../../../store/reducers/TaskSlice";
-import { Button, Modal, SelectButton, Switch } from "../../../components";
+import {
+  Button,
+  DatePicker,
+  Modal,
+  SelectButton,
+  Switch,
+} from "../../../components";
 import { StyleSheet, View } from "react-native";
 import { ButtonVariants } from "../../../components/UI/Button";
+import { accessCheck } from "../../../helpers";
 
 interface TasksFilterModalProps {
   isShowing: boolean;
   hide: () => void;
 }
 
-const statuses = [
-  {
-    id: 0,
-    name: "Все задачи",
-    status: 0,
-  },
-  {
-    id: 1,
-    name: "Незавершенные",
-    status: 1,
-  },
-  {
-    id: 2,
-    name: "Завершенные",
-    status: 2,
-  },
-];
-
 const TasksFilterModal: FC<TasksFilterModalProps> = ({ isShowing, hide }) => {
   const [shops, setShops] = useState<IShop[]>([]);
   const [departments, setDepartments] = useState<IDepartment[]>([]);
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
+  const [urgent, setUrgent] = useState<boolean>(false);
 
   const employee = useAppSelector((state) => state.employee.employee);
-  const selectedStatus = useAppSelector((state) => state.task.selectedStatus);
   const selectedShop = useAppSelector((state) => state.task.selectedShop);
   const selectedDepartment = useAppSelector(
     (state) => state.task.selectedDepartment
@@ -83,40 +74,31 @@ const TasksFilterModal: FC<TasksFilterModalProps> = ({ isShowing, hide }) => {
       taskSlice.actions.activeFilter({
         shopIds: [selectedShop.id],
         departmentIds: [selectedDepartment.id],
-        status: selectedStatus,
         creatorId: iTaskCreator ? employee?.id : undefined,
         employeeId: iTaskMember ? employee?.id : undefined,
         archive,
+        startDate,
+        endDate,
+        urgent,
       })
     );
     hide();
   };
 
   const reset = () => {
-    dispatch(taskSlice.actions.setSelectedStatus(0));
     dispatch(taskSlice.actions.setSelectedShop(ALL_SHOPS));
     dispatch(taskSlice.actions.setSelectedDepartment(ALL_DEPARTMENTS));
     dispatch(taskSlice.actions.setITaskCreator(false));
     dispatch(taskSlice.actions.setITaskMember(false));
     dispatch(taskSlice.actions.setArchive(false));
+    setStartDate("");
+    setEndDate("");
+    setUrgent(false);
   };
 
   return (
-    <Modal
-      title="Фильтры задач"
-      isShowing={isShowing}
-      hide={hide}
-      panelStyle={styles.modalPanel}
-    >
+    <Modal title="Фильтры задач" isShowing={isShowing} hide={hide}>
       <View style={styles.container}>
-        <SelectButton
-          title="Статусы"
-          items={statuses}
-          defaultSelectedItem={statuses[selectedStatus]}
-          onChange={(item) =>
-            dispatch(taskSlice.actions.setSelectedStatus(item.status))
-          }
-        />
         <SelectButton
           title="Филиалы"
           items={shops}
@@ -131,19 +113,28 @@ const TasksFilterModal: FC<TasksFilterModalProps> = ({ isShowing, hide }) => {
             dispatch(taskSlice.actions.setSelectedDepartment(item))
           }
         />
-        <Switch
-          label="Я участвую в задаче"
-          value={iTaskMember}
-          onValueChange={() =>
-            dispatch(taskSlice.actions.setITaskMember(!iTaskMember))
-          }
-        />
+        <DatePicker label="От" date={startDate} onChange={setStartDate} />
+        <DatePicker label="До" date={endDate} onChange={setEndDate} />
+        {accessCheck(employee, 1) && (
+          <Switch
+            label="Я участвую в задаче"
+            value={iTaskMember}
+            onValueChange={() =>
+              dispatch(taskSlice.actions.setITaskMember(!iTaskMember))
+            }
+          />
+        )}
         <Switch
           label="Я создатель задачи"
           value={iTaskCreator}
           onValueChange={() =>
             dispatch(taskSlice.actions.setITaskCreator(!iTaskCreator))
           }
+        />
+        <Switch
+          label="Срочная задача"
+          value={urgent}
+          onValueChange={() => setUrgent((prevState) => !prevState)}
         />
         <Switch
           label="В архиве"
@@ -164,9 +155,6 @@ const TasksFilterModal: FC<TasksFilterModalProps> = ({ isShowing, hide }) => {
 };
 
 const styles = StyleSheet.create({
-  modalPanel: {
-    height: 412
-  },
   container: {
     gap: 8,
   },
