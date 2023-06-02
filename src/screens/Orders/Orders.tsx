@@ -110,11 +110,11 @@ const Orders = () => {
     <>
       <OrdersFilterModal
         isShowing={ordersFilterModal.isShowing}
-        hide={ordersFilterModal.toggle}
+        hide={ordersFilterModal.close}
       />
       <OrdersToolbar
         reload={reload}
-        openOrdersFilterModal={ordersFilterModal.toggle}
+        openOrdersFilterModal={ordersFilterModal.open}
       />
       <View style={styles.container}>
         {isLoading ? (

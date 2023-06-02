@@ -63,7 +63,7 @@ const TasksDetailScreen = () => {
 
   const checkUnsavedDataAndCloseTaskDetail = () => {
     if (haveUnsavedData) {
-      unsavedDataModal.toggle();
+      unsavedDataModal.open();
       return false;
     } else {
       closeTaskDetail();
@@ -165,6 +165,7 @@ const TasksDetailScreen = () => {
       TaskAPI.update(updateBody)
         .then((data) => {
           updateTaskState(data);
+          if (close) closeTaskDetail();
         })
         .catch((e) =>
           showGlobalMessage(
@@ -189,6 +190,7 @@ const TasksDetailScreen = () => {
             createdAt: data.createdAt,
           };
           updateTaskState(taskClone);
+          if (close) closeTaskDetail();
         })
         .catch((e) =>
           showGlobalMessage(
@@ -197,24 +199,24 @@ const TasksDetailScreen = () => {
         )
         .finally(() => setIsLoading(false));
     }
-
-    if (close) {
-      closeTaskDetail();
-    }
   };
 
   return (
     <>
       <TaskDetailUnsavedDataModal
         isShowing={unsavedDataModal.isShowing}
-        hide={unsavedDataModal.toggle}
+        hide={unsavedDataModal.close}
         saveTask={saveTask}
       />
       <View style={styles.container}>
         <TasksDetailHeader
           closeTaskDetail={checkUnsavedDataAndCloseTaskDetail}
         />
-        <TasksDetailInfo isLoading={isLoading} saveTask={saveTask} />
+        <TasksDetailInfo
+          isLoading={isLoading}
+          saveTask={saveTask}
+          closeTaskDetail={closeTaskDetail}
+        />
       </View>
     </>
   );

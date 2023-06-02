@@ -9,12 +9,12 @@ import { useModal } from "../../hooks";
 const TasksDetailComments = () => {
   const taskMessages = useAppSelector((state) => state.task.taskMessages);
 
-  const { isShowing, toggle } = useModal();
+  const { isShowing, open, close } = useModal();
 
   return (
     <>
-      <TasksDetailCommentsModal isShowing={isShowing} hide={toggle} />
-      <TouchableOpacity onPress={toggle}>
+      <TasksDetailCommentsModal isShowing={isShowing} hide={close} />
+      <TouchableOpacity onPress={open}>
         <Text style={styles.title}>Комментарии</Text>
         {taskMessages.length > 0 ? (
           <View style={styles.lastMessage}>

@@ -1,20 +1,26 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 export interface IModal {
   isShowing: boolean;
-  toggle: () => void;
+  open: () => void;
+  close: () => void;
 }
 
 const useModal = (): IModal => {
   const [isShowing, setIsShowing] = useState(false);
 
-  function toggle() {
-    setIsShowing(!isShowing);
-  }
+  const open = () => {
+    setIsShowing(true);
+  };
+
+  const close = () => {
+    setIsShowing(false);
+  };
 
   return {
     isShowing,
-    toggle,
+    open,
+    close,
   };
 };
 
