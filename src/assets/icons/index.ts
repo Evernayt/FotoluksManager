@@ -24,6 +24,8 @@ import IconArrowLeft from "./IconArrowLeft";
 import IconSettings from "./IconSettings";
 import IconSum from "./IconSum";
 import IconCalendarTime from "./IconCalendarTime";
+import IconCircleCheck from "./IconCircleCheck";
+import IconCircle from "./IconCircle";
 
 export {
   IconChevronDown,
@@ -52,4 +54,6 @@ export {
   IconSettings,
   IconSum,
   IconCalendarTime,
+  IconCircleCheck,
+  IconCircle,
 };
