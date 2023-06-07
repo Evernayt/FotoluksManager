@@ -94,7 +94,6 @@ const styles = StyleSheet.create({
   },
   childrenContainer: {
     padding: 8,
-    flex: 1,
   },
 });
 
