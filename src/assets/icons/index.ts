@@ -26,6 +26,10 @@ import IconSum from "./IconSum";
 import IconCalendarTime from "./IconCalendarTime";
 import IconCircleCheck from "./IconCircleCheck";
 import IconCircle from "./IconCircle";
+import IconCheck from "./IconCheck";
+import IconListCheck from "./IconListCheck";
+import IconEye from "./IconEye";
+import IconEyeOff from "./IconEyeOff";
 
 export {
   IconChevronDown,
@@ -56,4 +60,8 @@ export {
   IconCalendarTime,
   IconCircleCheck,
   IconCircle,
+  IconCheck,
+  IconListCheck,
+  IconEye,
+  IconEyeOff,
 };
