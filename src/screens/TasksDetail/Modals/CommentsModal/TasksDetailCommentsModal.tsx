@@ -15,7 +15,7 @@ import { ITaskMessage } from "../../../../models/api/ITaskMessage";
 import TaskDetailCommentItemRight from "./TaskDetailCommentItemRight";
 import TaskDetailCommentItemLeft from "./TaskDetailCommentItemLeft";
 import { IconButton, SwipeableModal } from "../../../../components";
-import { IconSend } from "../../../../assets/icons";
+import { IconMessageCircle, IconSend } from "../../../../assets/icons";
 import { CreateTaskMessageDto } from "../../../../api/TaskMessageAPI/dto/create-task-message.dto";
 import TaskMessageAPI from "../../../../api/TaskMessageAPI/TaskMessageAPI";
 import { taskSlice } from "../../../../store/reducers/TaskSlice";
@@ -105,7 +105,7 @@ const TasksDetailCommentsModal: FC<TasksDetailCommentsModalProps> = ({
       hide={hide}
       panelStyle={styles.modalPanel}
     >
-      <>
+      {taskMessages.length ? (
         <FlatList
           data={taskMessages}
           keyExtractor={(item) => `${item.id}`}
@@ -113,25 +113,35 @@ const TasksDetailCommentsModal: FC<TasksDetailCommentsModalProps> = ({
           showsVerticalScrollIndicator={false}
           inverted
         />
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={[styles.messageInput, { height: Math.max(25, inputHeight) }]}
-            placeholder="Введите комментарий"
-            placeholderTextColor={COLORS.secondaryText}
-            value={text}
-            onChangeText={setText}
-            multiline={true}
-            onContentSizeChange={(event) =>
-              setInputHeight(event.nativeEvent.contentSize.height)
-            }
+      ) : (
+        <View style={styles.noComments}>
+          <IconMessageCircle
+            color={COLORS.linkIcon}
+            strokeWidth={1}
+            width={48}
+            height={48}
           />
-          <IconButton
-            containerStyle={styles.sendBtn}
-            icon={<IconSend style={styles.sendIcon} color={COLORS.linkIcon} />}
-            onPress={sendMessage}
-          />
+          <Text style={styles.noCommentsText}>Нет комментариев</Text>
         </View>
-      </>
+      )}
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={[styles.messageInput, { height: Math.max(25, inputHeight) }]}
+          placeholder="Введите комментарий"
+          placeholderTextColor={COLORS.secondaryText}
+          value={text}
+          onChangeText={setText}
+          multiline={true}
+          onContentSizeChange={(event) =>
+            setInputHeight(event.nativeEvent.contentSize.height)
+          }
+        />
+        <IconButton
+          containerStyle={styles.sendBtn}
+          icon={<IconSend style={styles.sendIcon} color={COLORS.linkIcon} />}
+          onPress={sendMessage}
+        />
+      </View>
     </SwipeableModal>
   );
 };
@@ -140,6 +150,15 @@ const styles = StyleSheet.create({
   modalPanel: {
     height: "80%",
     maxHeight: "80%",
+  },
+  noComments: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+  noCommentsText: {
+    color: COLORS.secondaryText,
   },
   messageItem: {
     paddingBottom: 8,
