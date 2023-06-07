@@ -1,7 +1,4 @@
 import { FC } from "react";
-import { useAppDispatch } from "../../../hooks/redux";
-import { useNavigation } from "@react-navigation/native";
-import { taskSlice } from "../../../store/reducers/TaskSlice";
 import { Button, Modal } from "../../../components";
 import { StyleSheet, Text, View } from "react-native";
 import { ButtonVariants } from "../../../components/UI/Button";
@@ -11,20 +8,18 @@ interface TaskDetailUnsavedDataModalProps {
   isShowing: boolean;
   hide: () => void;
   saveTask: () => void;
+  closeTaskDetail: () => void;
 }
 
 const TaskDetailUnsavedDataModal: FC<TaskDetailUnsavedDataModalProps> = ({
   isShowing,
   hide,
   saveTask,
+  closeTaskDetail,
 }) => {
-  const dispatch = useAppDispatch();
-  const navigation = useNavigation();
-
   const closeTask = () => {
     hide();
-    dispatch(taskSlice.actions.clearTask());
-    navigation.goBack();
+    closeTaskDetail();
   };
 
   const saveTaskAndClose = () => {
@@ -35,7 +30,11 @@ const TaskDetailUnsavedDataModal: FC<TaskDetailUnsavedDataModalProps> = ({
   return (
     <Modal title="Сохранить изменения?" isShowing={isShowing} hide={hide}>
       <Text style={styles.message}>Есть не сохраненные данные.</Text>
-      <Button text="Продолжить редактирование" onPress={hide} />
+      <Button
+        containerStyle={{ flex: 0 }}
+        text="Продолжить редактирование"
+        onPress={hide}
+      />
       <View style={styles.controls}>
         <Button text="Нет" onPress={closeTask} />
         <Button
