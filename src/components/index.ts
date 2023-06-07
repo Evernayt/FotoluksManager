@@ -20,6 +20,7 @@ import DatePicker from "./UI/DatePicker";
 import Linkify from "./UI/Linkify";
 import UpdaterModal from "./UpdaterModal";
 import Progress from "./UI/Progress";
+import Checkbox from "./UI/Checkbox";
 
 export {
   Button,
@@ -44,4 +45,5 @@ export {
   Linkify,
   UpdaterModal,
   Progress,
+  Checkbox,
 };
