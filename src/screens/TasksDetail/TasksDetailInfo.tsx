@@ -1,5 +1,5 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { IShop } from "../../models/api/IShop";
 import { IDepartment } from "../../models/api/IDepartment";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
@@ -10,6 +10,7 @@ import TaskAPI from "../../api/TaskAPI/TaskAPI";
 import {
   AvatarList,
   Button,
+  Checkbox,
   IconButton,
   KeyboardAvoidingWrapper,
   Linkify,
@@ -25,6 +26,8 @@ import TasksDetailExecutor from "./TasksDetailExecutor";
 import {
   IconBinaryTree,
   IconDeviceFloppy,
+  IconEye,
+  IconEyeOff,
   IconRotate2,
   IconStore,
 } from "../../assets/icons";
@@ -34,6 +37,9 @@ import { useModal } from "../../hooks";
 import TaskDetailCancelModal from "./Modals/TaskDetailCancelModal";
 import TasksDetailComments from "./TasksDetailComments";
 import { IconButtonVariants } from "../../components/UI/IconButton";
+import TaskDetailSubtasksModal from "./Modals/SubtasksModal/TaskDetailSubtasksModal";
+import TaskSubtaskAPI from "../../api/TaskSubtaskAPI/TaskSubtaskAPI";
+import { showGlobalMessage } from "../../components/GlobalMessage";
 
 interface TasksDetailInfoProps {
   isLoading: boolean;
@@ -49,6 +55,7 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({
   const [shops, setShops] = useState<IShop[]>([]);
   const [departments, setDepartments] = useState<IDepartment[]>([]);
   const [completionNote, setCompletionNote] = useState<string>("");
+  const [viewMode, setViewMode] = useState<boolean>(false);
 
   const task = useAppSelector((state) => state.task.task);
   const beforeTask = useAppSelector((state) => state.task.beforeTask);
@@ -64,6 +71,7 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({
   const isTaskCreated = task.id !== 0;
   const iCreator = task.creator ? task.creator.id === employee?.id : true;
 
+  const taskSubtasksModal = useModal();
   const taskMembersModal = useModal();
   const cancelTaskModal = useModal();
 
@@ -87,6 +95,7 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({
   }, []);
 
   useEffect(() => {
+    if (viewMode) return;
     JSON.stringify(task) != JSON.stringify(beforeTask)
       ? dispatch(taskSlice.actions.setHaveUnsavedData(true))
       : dispatch(taskSlice.actions.setHaveUnsavedData(false));
@@ -118,8 +127,24 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({
     });
   };
 
+  const toggleSubtask = (id: number | string, completed: boolean) => {
+    if (typeof id === "string") return;
+
+    dispatch(taskSlice.actions.editTaskSubtaskById({ id, completed }));
+    TaskSubtaskAPI.update({ id, completed }).catch((e) => {
+      showGlobalMessage(e.response.data ? e.response.data.message : e.message);
+      dispatch(
+        taskSlice.actions.editTaskSubtaskById({ id, completed: !completed })
+      );
+    });
+  };
+
   const openCancelModal = () => {
     cancelTaskModal.open();
+  };
+
+  const openTaskSubtasksModal = () => {
+    taskSubtasksModal.open();
   };
 
   const openTaskMembersModal = () => {
@@ -153,6 +178,10 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({
   const editingRender = () => {
     return (
       <>
+        <TaskDetailSubtasksModal
+          isShowing={taskSubtasksModal.isShowing}
+          hide={taskSubtasksModal.close}
+        />
         <TaskDetailMembersModal
           isShowing={taskMembersModal.isShowing}
           hide={taskMembersModal.close}
@@ -177,6 +206,14 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({
             onChangeText={(text) =>
               dispatch(taskSlice.actions.setDescription(text))
             }
+          />
+          <Button
+            text={
+              task.taskSubtasks && task.taskSubtasks.length > 0
+                ? `Список подзадач: ${task.taskSubtasks.length}`
+                : "Добавить подзадачи"
+            }
+            onPress={openTaskSubtasksModal}
           />
           <SelectButton
             title="Филиалы"
@@ -248,6 +285,16 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({
           <Text style={styles.title}>Что сделать</Text>
           <Linkify>{description}</Linkify>
         </View>
+        <View style={styles.subtasks}>
+          {task.taskSubtasks?.map((taskSubtask) => (
+            <Checkbox
+              label={taskSubtask.text}
+              isChecked={taskSubtask.completed}
+              onChange={(isChecked) => toggleSubtask(taskSubtask.id, isChecked)}
+              key={taskSubtask.id}
+            />
+          ))}
+        </View>
         {taskMembers.length > 0 && (
           <View>
             <Text style={styles.title}>Участники</Text>
@@ -276,7 +323,7 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({
             )}
             <View style={styles.panel}>
               <View style={styles.info}>
-                {iCreator ? editingRender() : readingRender()}
+                {iCreator && !viewMode ? editingRender() : readingRender()}
               </View>
             </View>
             {isTaskCreated && (
@@ -289,23 +336,17 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({
         {iCreator && (
           <View style={styles.panel}>
             <View style={styles.controls}>
-              {haveUnsavedData && (
-                <IconButton
-                  containerStyle={styles.controlIcon}
-                  icon={
-                    <IconRotate2
-                      color={COLORS.secondaryIcon}
-                      onPress={openCancelModal}
-                    />
-                  }
-                />
-              )}
               {haveUnsavedData ? (
                 <>
                   <IconButton
                     containerStyle={styles.controlIcon}
+                    icon={<IconRotate2 color={COLORS.secondaryIcon} />}
+                    onPress={openCancelModal}
+                  />
+                  <IconButton
+                    containerStyle={styles.controlIcon}
                     variant={IconButtonVariants.primary}
-                    icon={<IconDeviceFloppy color={COLORS.secondaryIcon} />}
+                    icon={<IconDeviceFloppy color={COLORS.primaryIcon} />}
                     onPress={() => saveTask(false)}
                   />
                   <Button
@@ -315,11 +356,26 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({
                   />
                 </>
               ) : (
-                <Button
-                  text="Выйти"
-                  variant={ButtonVariants.primary}
-                  onPress={closeTaskDetail}
-                />
+                <>
+                  {isTaskCreated && (
+                    <IconButton
+                      containerStyle={styles.controlIcon}
+                      icon={
+                        viewMode ? (
+                          <IconEyeOff color={COLORS.secondaryIcon} />
+                        ) : (
+                          <IconEye color={COLORS.secondaryIcon} />
+                        )
+                      }
+                      onPress={() => setViewMode((prevState) => !prevState)}
+                    />
+                  )}
+                  <Button
+                    text="Выйти"
+                    variant={ButtonVariants.primary}
+                    onPress={closeTaskDetail}
+                  />
+                </>
               )}
             </View>
           </View>
@@ -382,6 +438,9 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: COLORS.primaryText,
     marginBottom: 2,
+  },
+  subtasks: {
+    gap: 8,
   },
 });
 

@@ -33,6 +33,15 @@ const TasksDetailScreen = () => {
   const taskMembersForDelete = useAppSelector(
     (state) => state.task.taskMembersForDelete
   );
+  const taskSubtasksForCreate = useAppSelector(
+    (state) => state.task.taskSubtasksForCreate
+  );
+  const taskSubtasksForUpdate = useAppSelector(
+    (state) => state.task.taskSubtasksForUpdate
+  );
+  const taskSubtasksForDelete = useAppSelector(
+    (state) => state.task.taskSubtasksForDelete
+  );
 
   const isTaskCreated = task.id !== 0;
 
@@ -160,6 +169,9 @@ const TasksDetailScreen = () => {
         departmentId: task.department?.id,
         taskMembersForCreate,
         taskMembersForDelete,
+        taskSubtasksForCreate,
+        taskSubtasksForUpdate,
+        taskSubtasksForDelete,
       };
 
       TaskAPI.update(updateBody)
@@ -180,6 +192,7 @@ const TasksDetailScreen = () => {
         departmentId: task.department?.id,
         creatorId: employee.id,
         taskMembersForCreate,
+        taskSubtasksForCreate,
       };
 
       TaskAPI.create(createBody)
@@ -207,6 +220,7 @@ const TasksDetailScreen = () => {
         isShowing={unsavedDataModal.isShowing}
         hide={unsavedDataModal.close}
         saveTask={saveTask}
+        closeTaskDetail={closeTaskDetail}
       />
       <View style={styles.container}>
         <TasksDetailHeader

@@ -1,3 +1,6 @@
+import { ITaskSubtask } from "../../../models/api/ITaskSubtask";
+import { UpdateTaskSubtaskDto } from "../../TaskSubtaskAPI/dto/update-task-subtask.dto";
+
 export class UpdateTaskDto {
   readonly id?: number;
   readonly name?: string;
@@ -13,4 +16,7 @@ export class UpdateTaskDto {
   readonly executorId?: number | null;
   readonly taskMembersForCreate?: number[];
   readonly taskMembersForDelete?: number[];
+  readonly taskSubtasksForCreate?: ITaskSubtask[];
+  readonly taskSubtasksForUpdate?: UpdateTaskSubtaskDto[];
+  readonly taskSubtasksForDelete?: number[];
 }
