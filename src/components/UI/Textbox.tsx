@@ -15,7 +15,7 @@ import {
 } from "react";
 
 interface TextboxProps extends TextInputProps {
-  label: string;
+  label?: string;
   labelBgColor?: string;
 }
 
@@ -39,10 +39,12 @@ const Textbox = forwardRef<TextInput, TextboxProps>(
     }, [isFocused]);
 
     const focuseHandler = () => {
+      if (!label) return;
       setIsFocused(true);
     };
 
     const blurHandler = () => {
+      if (!label) return;
       setIsFocused(false);
     };
 
@@ -63,17 +65,19 @@ const Textbox = forwardRef<TextInput, TextboxProps>(
     };
 
     return (
-      <View style={styles.container}>
-        <Animated.Text
-          style={[styles.label, labelStyle]}
-          onPress={() => inputRef.current?.focus()}
-        >
-          {label}
-        </Animated.Text>
+      <View style={[styles.container, { marginTop: label ? 4 : 0 }]}>
+        {label && (
+          <Animated.Text
+            style={[styles.label, labelStyle]}
+            onPress={() => inputRef.current?.focus()}
+          >
+            {label}
+          </Animated.Text>
+        )}
         <TextInput
           style={[styles.input, props.style]}
+          placeholder={label && ""}
           {...props}
-          placeholder=""
           onFocus={focuseHandler}
           onBlur={blurHandler}
           ref={inputRef}
@@ -85,7 +89,7 @@ const Textbox = forwardRef<TextInput, TextboxProps>(
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 4,
+    flex: 1,
   },
   label: {
     position: "absolute",
