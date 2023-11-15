@@ -14,7 +14,7 @@ import TasksToolbar from "./TasksToolbar";
 import TasksFilterModal from "./Modals/TasksFilterModal";
 import { accessCheck } from "../../helpers";
 
-const limit = 25;
+const limit = 10;
 
 const Tasks = () => {
   const [pageCount, setPageCount] = useState<number>(1);

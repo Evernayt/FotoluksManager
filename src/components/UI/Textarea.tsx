@@ -68,9 +68,10 @@ const Textarea: FC<TextareaProps> = ({
       <TextInput
         style={[styles.input, props.style]}
         numberOfLines={5}
+        placeholderTextColor={COLORS.secondaryText}
+        placeholder={label && ""}
         {...props}
         multiline={true}
-        placeholder=""
         onFocus={focuseHandler}
         onBlur={blurHandler}
         ref={inputRef}

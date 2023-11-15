@@ -13,7 +13,7 @@ import Order from "./Order";
 import OrdersToolbar from "./OrdersToolbar";
 import OrdersFilterModal from "./Modals/OrdersFilterModal";
 
-const limit = 25;
+const limit = 10;
 
 const Orders = () => {
   const [pageCount, setPageCount] = useState<number>(1);

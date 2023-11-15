@@ -10,6 +10,7 @@ import { appSlice } from "../store/reducers/AppSlice";
 import { logo } from "../constants/images";
 import { COLORS } from "../constants/theme";
 import Progress from "./UI/Progress";
+import { useModal } from "../hooks";
 
 const UpdaterModal = () => {
   const [updateData, setUpdateData] = useState<IUpdateData>();
@@ -18,6 +19,8 @@ const UpdaterModal = () => {
 
   const checkUpdate = useAppSelector((state) => state.app.checkUpdate);
   const downloadUpdate = useAppSelector((state) => state.app.downloadUpdate);
+
+  const cancelUpdateModal = useModal();
 
   const dispatch = useAppDispatch();
 
@@ -110,17 +113,21 @@ const UpdaterModal = () => {
       !downloadUpdate.failure
     ) {
       return (
-        <Button
-          text="Загрузить"
-          variant={ButtonVariants.primary}
-          onPress={updateDownload}
-        />
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          <Button text="Не сейчас" onPress={cancelUpdateModal.open} />
+          <Button
+            text="Загрузить"
+            variant={ButtonVariants.primary}
+            onPress={updateDownload}
+          />
+        </View>
       );
     } else if (downloadUpdate.success) {
       return (
         <Button
           text="Установить"
           variant={ButtonVariants.primary}
+          containerStyle={styles.button}
           onPress={updateInstall}
         />
       );
@@ -129,27 +136,50 @@ const UpdaterModal = () => {
     }
   };
 
+  const cancelUpdate = () => {
+    cancelUpdateModal.close();
+    dispatch(appSlice.actions.setCheckUpdate({ success: false }));
+  };
+
+  const сheckUpdateMessage = getCheckUpdateMessage();
+  const downloadUpdateMessage = getDownloadUpdateMessage();
+
   return (
-    <Modal title="Обновление" isShowing={checkUpdate.success}>
-      <View style={styles.container}>
-        <View>
-          <Image style={styles.logo} source={logo} />
-          <Text style={styles.text}>{getCheckUpdateMessage()}</Text>
-          <Text style={styles.text}>{getDownloadUpdateMessage()}</Text>
-        </View>
-        <View style={styles.controls}>
+    <>
+      <Modal title="Обновление" isShowing={checkUpdate.success}>
+        <Image style={styles.logo} source={logo} />
+        {сheckUpdateMessage && (
+          <Text style={styles.text}>{сheckUpdateMessage}</Text>
+        )}
+        {downloadUpdateMessage && (
+          <Text style={styles.text}>{downloadUpdateMessage}</Text>
+        )}
+        <View style={styles.footer}>
           {downloadUpdate.pending && <Progress percent={percent} />}
           {renderButton()}
         </View>
-      </View>
-    </Modal>
+      </Modal>
+      <Modal
+        title="Отклонить обновление"
+        isShowing={cancelUpdateModal.isShowing}
+      >
+        <Text style={styles.text}>
+          {`Вы действительно хотите отклонить обновление?\n\nИспользование старой версии\nможет вызвать непредвиденные ошибки`}
+        </Text>
+        <View style={styles.controls}>
+          <Button text="Да" onPress={cancelUpdate} />
+          <Button
+            text="Нет"
+            variant={ButtonVariants.primary}
+            onPress={cancelUpdateModal.close}
+          />
+        </View>
+      </Modal>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: "space-between",
-  },
   logo: {
     width: 80,
     height: 80,
@@ -161,10 +191,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
   },
-  controls: {
+  footer: {
     gap: 12,
-    flex: 0.5,
-    justifyContent: "flex-end",
+    marginTop: 16,
+  },
+  button: {
+    flex: 0,
+  },
+  controls: {
+    gap: 8,
+    flexDirection: "row",
+    marginTop: 16,
   },
 });
 

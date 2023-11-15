@@ -76,6 +76,7 @@ const Textbox = forwardRef<TextInput, TextboxProps>(
         )}
         <TextInput
           style={[styles.input, props.style]}
+          placeholderTextColor={COLORS.secondaryText}
           placeholder={label && ""}
           {...props}
           onFocus={focuseHandler}

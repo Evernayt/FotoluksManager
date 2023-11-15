@@ -13,7 +13,7 @@ import { showGlobalMessage } from "../../components/GlobalMessage";
 import { GlobalMessageVariants } from "../../models/IGlobalMessage";
 import { UpdateTaskDto } from "../../api/TaskAPI/dto/update-task.dto";
 import { CreateTaskDto } from "../../api/TaskAPI/dto/create-task.dto";
-import { COLORS, SIZES } from "../../constants/theme";
+import { COLORS } from "../../constants/theme";
 import TasksDetailHeader from "./TasksDetailHeader";
 import TasksDetailInfo from "./TasksDetailInfo";
 import { useModal } from "../../hooks";
@@ -243,11 +243,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 12,
     gap: 12,
-  },
-  panel: {
-    backgroundColor: COLORS.cardBackground,
-    flex: 1,
-    borderRadius: SIZES.borderRadius,
   },
 });
 

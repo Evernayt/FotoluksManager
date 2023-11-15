@@ -1,5 +1,5 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { IShop } from "../../models/api/IShop";
 import { IDepartment } from "../../models/api/IDepartment";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
