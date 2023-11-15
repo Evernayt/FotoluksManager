@@ -1,11 +1,11 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import { ITaskMessage } from "../../../../models/api/ITaskMessage";
+import { ITaskMessage } from "../../models/api/ITaskMessage";
 import { FC } from "react";
-import { COLORS, SIZES } from "../../../../constants/theme";
+import { COLORS, SIZES } from "../../constants/theme";
 import moment from "moment";
-import { DEF_DATE_FORMAT } from "../../../../constants/app";
-import { defaultAvatar } from "../../../../constants/images";
-import { Linkify } from "../../../../components";
+import { DEF_DATE_FORMAT } from "../../constants/app";
+import { defaultAvatar } from "../../constants/images";
+import { Linkify } from "../../components";
 
 interface TaskDetailCommentItemLeftProps {
   taskMessage: ITaskMessage;
@@ -15,6 +15,8 @@ const TaskDetailCommentItemLeft: FC<TaskDetailCommentItemLeftProps> = ({
   taskMessage,
 }) => {
   const created = moment(taskMessage.createdAt).format(DEF_DATE_FORMAT);
+
+  const getEditedText = taskMessage.edited ? "(изменено)" : "";
 
   return (
     <View style={styles.container}>
@@ -30,7 +32,9 @@ const TaskDetailCommentItemLeft: FC<TaskDetailCommentItemLeftProps> = ({
         <Text style={styles.name}>{taskMessage.employee.name}</Text>
         <View style={styles.section}>
           <Linkify>{taskMessage.message}</Linkify>
-          <Text style={styles.date}>{created}</Text>
+          <Text
+            style={styles.bottom_text}
+          >{`${getEditedText} ${created}`}</Text>
         </View>
       </View>
     </View>
@@ -63,7 +67,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: SIZES.borderRadius,
     borderBottomRightRadius: SIZES.borderRadius,
   },
-  date: {
+  bottom_text: {
     color: COLORS.secondaryText,
     fontSize: 10,
   },

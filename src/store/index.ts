@@ -3,7 +3,7 @@ import AppSlice from "./reducers/AppSlice";
 import EmployeeSlice from "./reducers/EmployeeSlice";
 import TaskSlice from "./reducers/TaskSlice";
 import OrderSlice from "./reducers/OrderSlice";
-//import ModalSlice from "./reducers/ModalSlice";
+import ModalSlice from "./reducers/ModalSlice";
 //import ControlPanelSlice from './reducers/ControlPanelSlice';
 
 const store = configureStore({
@@ -12,7 +12,7 @@ const store = configureStore({
     employee: EmployeeSlice,
     task: TaskSlice,
     order: OrderSlice,
-    //modal: ModalSlice,
+    modal: ModalSlice,
     //controlPanel: ControlPanelSlice,
   },
 });
