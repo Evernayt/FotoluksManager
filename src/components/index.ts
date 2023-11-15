@@ -21,6 +21,8 @@ import Linkify from "./UI/Linkify";
 import UpdaterModal from "./UpdaterModal";
 import Progress from "./UI/Progress";
 import Checkbox from "./UI/Checkbox";
+import ContextMenu from "./UI/ContextMenu";
+import MessageTextbox from "./UI/MessageTextbox";
 
 export {
   Button,
@@ -46,4 +48,6 @@ export {
   UpdaterModal,
   Progress,
   Checkbox,
+  ContextMenu,
+  MessageTextbox,
 };
