@@ -30,6 +30,7 @@ import IconCheck from "./IconCheck";
 import IconListCheck from "./IconListCheck";
 import IconEye from "./IconEye";
 import IconEyeOff from "./IconEyeOff";
+import IconEdit from "./IconEdit";
 
 export {
   IconChevronDown,
@@ -64,4 +65,5 @@ export {
   IconListCheck,
   IconEye,
   IconEyeOff,
+  IconEdit,
 };
