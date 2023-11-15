@@ -8,12 +8,14 @@ import {
   TASKS_DETAIL_ROUTE,
   PROFILE_ROUTE,
   SETTINGS_ROUTE,
+  TASKS_DETAIL_COMMENTS_ROUTE,
 } from "./src/constants/routes";
 import {
   LoginScreen,
   ProfileScreen,
   SettingsScreen,
   TasksDetailScreen,
+  TasksDetailCommentsScreen,
 } from "./src/screens";
 import GlobalMessage from "./src/components/GlobalMessage";
 import { Provider } from "react-redux";
@@ -25,12 +27,14 @@ import { NOTIF_CHANEL_ID } from "./src/constants/app";
 import { useAppSelector } from "./src/hooks/redux";
 import { getApps } from "./src/helpers";
 import { TabBar, UpdaterModal } from "./src/components";
+import { MenuProvider } from "react-native-popup-menu";
 
 type RootStackParamList = {
   LOGIN_ROUTE: undefined;
   HOME_ROUTE: undefined;
   TASKS_DETAIL_ROUTE: { taskId: number; created: string } | undefined;
   PROFILE_ROUTE: undefined;
+  TASKS_DETAIL_COMMENTS_ROUTE: undefined;
 };
 
 export type NavigationProps = NativeStackNavigationProp<RootStackParamList>;
@@ -78,20 +82,26 @@ const App = () => {
     <Provider store={store}>
       <GlobalMessage />
       <UpdaterModal />
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName={LOGIN_ROUTE}
-          screenOptions={{ headerShown: false }}
-        >
-          <Stack.Screen name={LOGIN_ROUTE} component={LoginScreen} />
-          <Stack.Screen name={HOME_ROUTE} component={Tabs} />
-          <Stack.Screen
-            name={TASKS_DETAIL_ROUTE}
-            component={TasksDetailScreen}
-          />
-          <Stack.Screen name={PROFILE_ROUTE} component={ProfileScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <MenuProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName={LOGIN_ROUTE}
+            screenOptions={{ headerShown: false }}
+          >
+            <Stack.Screen name={LOGIN_ROUTE} component={LoginScreen} />
+            <Stack.Screen name={HOME_ROUTE} component={Tabs} />
+            <Stack.Screen
+              name={TASKS_DETAIL_ROUTE}
+              component={TasksDetailScreen}
+            />
+            <Stack.Screen name={PROFILE_ROUTE} component={ProfileScreen} />
+            <Stack.Screen
+              name={TASKS_DETAIL_COMMENTS_ROUTE}
+              component={TasksDetailCommentsScreen}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </MenuProvider>
     </Provider>
   );
 };

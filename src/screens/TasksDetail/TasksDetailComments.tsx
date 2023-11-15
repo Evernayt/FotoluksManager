@@ -1,20 +1,23 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useAppSelector } from "../../hooks/redux";
 import { defaultAvatar } from "../../constants/images";
-import { COLORS } from "../../constants/theme";
 import { IconChevronDown } from "../../assets/icons";
-import TasksDetailCommentsModal from "./Modals/CommentsModal/TasksDetailCommentsModal";
-import { useModal } from "../../hooks";
+import { COLORS } from "../../constants/theme";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationProps } from "../../../App";
 
 const TasksDetailComments = () => {
   const taskMessages = useAppSelector((state) => state.task.taskMessages);
 
-  const { isShowing, open, close } = useModal();
+  const navigation = useNavigation<NavigationProps>();
+
+  const openTaskDetailComments = () => {
+    navigation.navigate("TASKS_DETAIL_COMMENTS_ROUTE");
+  };
 
   return (
     <>
-      <TasksDetailCommentsModal isShowing={isShowing} hide={close} />
-      <TouchableOpacity onPress={open}>
+      <TouchableOpacity onPress={openTaskDetailComments}>
         <Text style={styles.title}>Комментарии</Text>
         {taskMessages.length > 0 ? (
           <View style={styles.lastMessage}>
