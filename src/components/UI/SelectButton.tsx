@@ -13,7 +13,7 @@ export interface ISelectItem {
 interface SelectButtonProps {
   title: string;
   items: ISelectItem[];
-  defaultSelectedItem?: ISelectItem;
+  defaultSelectedItem?: ISelectItem | null;
   disabled?: boolean;
   onChange: (item: any, index: number) => void;
 }

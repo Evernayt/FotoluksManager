@@ -1,5 +1,5 @@
-import { IData } from '../IData';
-import { IEmployee } from './IEmployee';
+import { IData } from "../IData";
+import { IEmployee } from "./IEmployee";
 
 export interface ITaskMessage {
   id: number;

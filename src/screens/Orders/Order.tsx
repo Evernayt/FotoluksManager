@@ -7,25 +7,21 @@ import { DEF_DATE_FORMAT } from "../../constants/app";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProps } from "../../../App";
 import { IOrder } from "../../models/api/IOrder";
+import { IOrderProduct } from "../../models/api/IOrderProduct";
 
 interface OrderProps {
   order: IOrder;
 }
 
-const createServicesName = (order: IOrder) => {
-  const finishedProducts = order.finishedProducts?.filter(
-    (finishedProduct, index, self) =>
+const createServicesName = (orderProducts: IOrderProduct[]) => {
+  const orderProductsWithoutDupl = orderProducts?.filter(
+    (orderProduct, index, self) =>
       self.findIndex((t) => {
-        return t.type?.id === finishedProduct.type?.id;
+        return t.product?.id === orderProduct.product?.id;
       }) === index
   );
-  const services = finishedProducts
-    ?.map(
-      (finishedProduct) =>
-        `${
-          finishedProduct.product?.name
-        } ${finishedProduct.type?.name.toLowerCase()}`
-    )
+  const services = orderProductsWithoutDupl
+    ?.map((orderProduct) => orderProduct.product?.name)
     .join(", ");
   return services ? services : "Нет услуг";
 };
@@ -33,21 +29,12 @@ const createServicesName = (order: IOrder) => {
 const Order: FC<OrderProps> = ({ order }) => {
   const created = moment(order.createdAt).format(DEF_DATE_FORMAT);
 
-  const navigation = useNavigation<NavigationProps>();
-
-  const openTask = () => {
-    // navigation.navigate("TASKS_DETAIL_ROUTE", {
-    //   taskId: task.id,
-    //   created: task.createdAt,
-    // });
-  };
-
   return (
-    <TouchableOpacity style={styles.container} onPress={openTask}>
+    <TouchableOpacity style={styles.container}>
       <View style={styles.titleContainer}>
         <Text style={styles.title} numberOfLines={2}>{`${
           order.id
-        }. ${createServicesName(order)}`}</Text>
+        }. ${createServicesName(order.orderProducts || [])}`}</Text>
         <Text style={[styles.status, { backgroundColor: order.status?.color }]}>
           {order.status?.name}
         </Text>

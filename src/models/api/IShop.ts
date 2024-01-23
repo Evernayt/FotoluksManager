@@ -1,6 +1,6 @@
-import { GetShopsDto } from '../../api/ShopAPI/dto/get-shops.dto';
-import { IData } from '../IData';
-import { IFilter } from '../IFilter';
+import { GetShopsDto } from "../../api/ShopAPI/dto/get-shops.dto";
+import { IData } from "../IData";
+import { IFilter } from "../IFilter";
 
 export interface IShop {
   id: number;

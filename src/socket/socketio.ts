@@ -1,11 +1,14 @@
 import { io, Socket } from "socket.io-client";
 import { SERVER_API_URL } from "../constants/api";
 import { INotification } from "../models/api/INotification";
+import store from "../store";
 
 let socket: Socket;
 
-const connect = () => {
+const connect = (employeeId: number) => {
   socket = io(SERVER_API_URL);
+
+  socket.emit('addEmployee', employeeId);
 };
 
 const disconnect = () => {
@@ -16,7 +19,8 @@ const isConnected = () => {
   if (socket) {
     return true;
   } else {
-    connect();
+    const employee = store.getState().employee.employee;
+    connect(employee?.id || 0);
     return false;
   }
 };

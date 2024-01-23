@@ -59,7 +59,6 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({
 
   const task = useAppSelector((state) => state.task.task);
   const beforeTask = useAppSelector((state) => state.task.beforeTask);
-  const name = useAppSelector((state) => state.task.task.name);
   const title = useAppSelector((state) => state.task.task.title);
   const description = useAppSelector((state) => state.task.task.description);
   const shop = useAppSelector((state) => state.task.task.shop);
@@ -187,20 +186,14 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({
           hide={taskMembersModal.close}
         />
         <View style={styles.inputs}>
-          <Textbox
-            label="Заголовок"
-            labelBgColor={COLORS.cardBackground}
-            value={name}
-            onChangeText={(text) => dispatch(taskSlice.actions.setName(text))}
-          />
           <Textarea
-            label="Что не так"
+            label="Заголовок"
             labelBgColor={COLORS.cardBackground}
             value={title}
             onChangeText={(text) => dispatch(taskSlice.actions.setTitle(text))}
           />
           <Textarea
-            label="Что сделать"
+            label="Описание"
             labelBgColor={COLORS.cardBackground}
             value={description}
             onChangeText={(text) =>
@@ -270,19 +263,12 @@ const TasksDetailInfo: FC<TasksDetailInfoProps> = ({
             >{`Создатель: ${task.creator?.name}`}</Text>
           </View>
         </View>
-
-        {name && (
-          <View>
-            <Text style={styles.title}>Заголовок</Text>
-            <Linkify>{name}</Linkify>
-          </View>
-        )}
         <View>
-          <Text style={styles.title}>Что не так</Text>
+          <Text style={styles.title}>Заголовок</Text>
           <Linkify>{title}</Linkify>
         </View>
         <View>
-          <Text style={styles.title}>Что сделать</Text>
+          <Text style={styles.title}>Описание</Text>
           <Linkify>{description}</Linkify>
         </View>
         <View style={styles.subtasks}>

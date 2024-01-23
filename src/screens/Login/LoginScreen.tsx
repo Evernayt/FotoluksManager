@@ -81,7 +81,7 @@ const LoginScreen = () => {
     }
     setEmployee(employee);
 
-    socketio.connect();
+    socketio.connect(employee.id);
 
     subscribeTopic("fotoluks-manager");
     notificationListener(employee);

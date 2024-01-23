@@ -15,7 +15,7 @@ import SwipeableModal from "./SwipeableModal";
 export interface IAvatarListItem {
   id: number;
   name: string;
-  avatar?: string;
+  avatar?: string | null;
 }
 
 interface AvatarListProps {

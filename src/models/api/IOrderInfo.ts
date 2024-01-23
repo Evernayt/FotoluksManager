@@ -1,10 +1,11 @@
-import { IData } from '../IData';
-import { IEmployee } from './IEmployee';
-import { IStatus } from './IStatus';
+import { IData } from "../IData";
+import { IEmployee } from "./IEmployee";
+import { IStatus } from "./IStatus";
 
 export interface IOrderInfo {
   id: number;
   createdAt: string;
+  statusId?: number;
   status?: IStatus;
   employee?: IEmployee;
 }
